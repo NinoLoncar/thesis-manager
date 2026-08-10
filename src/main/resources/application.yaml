@@ -1,3 +1,7 @@
 spring:
   application:
     name: thesis-manager
+  datasource:
+    url:
+    username:
+    password:
