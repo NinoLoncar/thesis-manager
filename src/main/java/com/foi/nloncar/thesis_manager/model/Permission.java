@@ -5,7 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "permission")
@@ -17,6 +21,9 @@ public class Permission {
 
 	@Column(nullable = false, unique = true)
 	private String name;
+
+	@ManyToMany(mappedBy = "permissions")
+	private List<Role> roles = new ArrayList<>();
 
 	public Permission() {
 	}
@@ -39,5 +46,9 @@ public class Permission {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
 	}
 }

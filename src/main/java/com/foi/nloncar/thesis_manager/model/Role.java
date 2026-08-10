@@ -32,6 +32,9 @@ public class Role {
 	)
 	private List<Permission> permissions = new ArrayList<>();
 
+	@ManyToMany(mappedBy = "roles")
+	private List<User> users = new ArrayList<>();
+
 	public Role() {
 	}
 
@@ -57,5 +60,9 @@ public class Role {
 
 	public List<Permission> getPermissions() {
 		return permissions;
+	}
+
+	public List<User> getUsers() {
+		return users;
 	}
 }
