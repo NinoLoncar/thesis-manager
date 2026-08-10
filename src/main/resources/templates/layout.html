@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<meta charset="UTF-8">
+	<title layout:title-pattern="$CONTENT_TITLE - Thesis Manager">Thesis Manager</title>
+</head>
+<body>
+<header>
+	<h1>Thesis Manager</h1>
+</header>
+<nav>
+	<ul>
+		<li><a href="/">Home</a></li>
+		<li th:if="${permissions.contains('USERS_READ')}"><a href="/users">Users</a></li>
+	</ul>
+</nav>
+<main layout:fragment="content">
+
+</main>
+</body>
+</html>
