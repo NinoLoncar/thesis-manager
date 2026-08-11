@@ -1,5 +1,6 @@
 package com.foi.nloncar.thesis_manager.aspect;
 
+import com.foi.nloncar.thesis_manager.aspect.security.RedirectAspect;
 import com.foi.nloncar.thesis_manager.rest.security.PermissionService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
