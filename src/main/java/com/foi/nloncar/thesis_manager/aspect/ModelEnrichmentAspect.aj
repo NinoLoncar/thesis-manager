@@ -10,7 +10,7 @@ import java.util.Set;
 
 public aspect ModelEnrichmentAspect {
 
-	declare precedence :LoginRedirectAspect,SidebarMenuAspect;
+	declare precedence : RedirectAspect, ModelEnrichmentAspect;
 
 	Object around(Model model):
 			execution(* com.foi.nloncar.thesis_manager.gui..*.*(Model))
