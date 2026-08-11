@@ -1,4 +1,4 @@
-package com.foi.nloncar.thesis_manager.rest.security;
+package com.foi.nloncar.thesis_manager.exception;
 
 public class AuthenticationException extends RuntimeException {
 
