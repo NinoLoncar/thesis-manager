@@ -1,6 +1,7 @@
-package com.foi.nloncar.thesis_manager.aspect;
+package com.foi.nloncar.thesis_manager.aspect.security;
 
 import com.foi.nloncar.thesis_manager.annotation.RequiresPagePermission;
+import com.foi.nloncar.thesis_manager.aspect.ApplicationContextHolder;
 import com.foi.nloncar.thesis_manager.rest.security.PermissionService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
