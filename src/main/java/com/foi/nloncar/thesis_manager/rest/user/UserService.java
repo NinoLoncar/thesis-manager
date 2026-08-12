@@ -6,6 +6,7 @@ import com.foi.nloncar.thesis_manager.model.Role;
 import com.foi.nloncar.thesis_manager.model.User;
 import com.foi.nloncar.thesis_manager.repository.RoleRepository;
 import com.foi.nloncar.thesis_manager.repository.UserRepository;
+import com.foi.nloncar.thesis_manager.rest.security.PasswordHasher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +16,12 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
+	private final PasswordHasher passwordHasher;
 
-	public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+	public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordHasher passwordHasher) {
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
+		this.passwordHasher = passwordHasher;
 	}
 
 	public List<UserDto> getAllUsers() {
@@ -30,7 +33,7 @@ public class UserService {
 	public UserDto createUser(CreateUserRequest request) {
 		List<Role> roles = roleRepository.findAllById(request.roleIds());
 
-		User user = new User(request.email(), request.firstName(), request.lastName(), request.password());
+		User user = new User(request.email(), request.firstName(), request.lastName(), passwordHasher.hash(request.password()));
 		user.getRoles().addAll(roles);
 
 		User saved = saveUser(user);

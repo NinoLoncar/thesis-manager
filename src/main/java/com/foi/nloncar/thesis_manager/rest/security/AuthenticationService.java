@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
 	private final UserRepository userRepository;
+	private final PasswordHasher passwordHasher;
 
-	public AuthenticationService(UserRepository userRepository) {
+	public AuthenticationService(UserRepository userRepository, PasswordHasher passwordHasher) {
 		this.userRepository = userRepository;
+		this.passwordHasher = passwordHasher;
 	}
 
 	public void login(LoginRequest request, HttpSession session) {
@@ -21,7 +23,7 @@ public class AuthenticationService {
 				() -> new AuthenticationException("Invalid email or password")
 		);
 
-		if (!user.getPassword().equals(request.password())) {
+		if (!passwordHasher.check(request.password(), user.getPassword())) {
 			throw new AuthenticationException("Invalid email or password");
 		}
 
