@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+	<title>Create User</title>
+	<script src="/js/user/create-user.js"></script>
+</head>
+<body>
+<main layout:fragment="content">
+	<h1>Create User</h1>
+	<form>
+		<div>
+			<label for="email">Email</label>
+			<input type="email" id="email" name="email" required>
+		</div>
+		<div>
+			<label for="firstName">First name</label>
+			<input type="text" id="firstName" name="firstName" required>
+		</div>
+		<div>
+			<label for="lastName">Last name</label>
+			<input type="text" id="lastName" name="lastName" required>
+		</div>
+		<div>
+			<label for="password">Password</label>
+			<input type="password" id="password" name="password" required>
+		</div>
+		<div>
+			<span>Roles</span>
+			<div id="roles-list"></div>
+		</div>
+		<button id="create-user-btn">Create</button>
+	</form>
+</main>
+</body>
+</html>

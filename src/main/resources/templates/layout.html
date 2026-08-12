@@ -13,6 +13,7 @@
 	<ul>
 		<li><a href="/">Home</a></li>
 		<li th:if="${permissions.contains('USERS_READ')}"><a href="/users">Users</a></li>
+		<li th:if="${permissions.contains('USER_CREATE')}"><a href="/users/create">Create user</a></li>
 	</ul>
 </nav>
 <main layout:fragment="content">

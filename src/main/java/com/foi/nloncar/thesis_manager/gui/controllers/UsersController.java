@@ -13,4 +13,10 @@ public class UsersController {
 	public String usersPage(Model model) {
 		return "user/users";
 	}
+
+	@GetMapping("/users/create")
+	@RequiresPagePermission("USER_CREATE")
+	public String createUserPage(Model model) {
+		return "user/create-user";
+	}
 }
