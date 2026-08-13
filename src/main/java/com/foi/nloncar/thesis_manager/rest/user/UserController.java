@@ -3,12 +3,10 @@ package com.foi.nloncar.thesis_manager.rest.user;
 import com.foi.nloncar.thesis_manager.annotation.RequiresPermission;
 import com.foi.nloncar.thesis_manager.dto.CreateUserRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/users")
 public class UserController {
 
 	private final UserService userService;
@@ -17,15 +15,23 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	@GetMapping("/api/users")
+	@GetMapping
 	@RequiresPermission("USERS_READ")
 	public ResponseEntity<?> getUsers() {
 		return ResponseEntity.ok().body(userService.getAllUsers());
 	}
 
-	@PostMapping("/api/users")
+	@PostMapping
 	@RequiresPermission("USER_CREATE")
 	public ResponseEntity<?> createUser(@RequestBody CreateUserRequest request) {
 		return ResponseEntity.ok().body(userService.createUser(request));
 	}
+
+	@DeleteMapping("/{id}")
+	@RequiresPermission("USER_DELETE")
+	public ResponseEntity<?> deleteUser(@PathVariable("id") Integer userId) {
+		userService.deleteUser(userId);
+		return ResponseEntity.ok().body("User has been deleted");
+	}
+
 }

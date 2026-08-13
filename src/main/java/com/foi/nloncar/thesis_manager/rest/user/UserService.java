@@ -2,6 +2,7 @@ package com.foi.nloncar.thesis_manager.rest.user;
 
 import com.foi.nloncar.thesis_manager.dto.CreateUserRequest;
 import com.foi.nloncar.thesis_manager.dto.UserDto;
+import com.foi.nloncar.thesis_manager.exception.NotFoundException;
 import com.foi.nloncar.thesis_manager.model.Role;
 import com.foi.nloncar.thesis_manager.model.User;
 import com.foi.nloncar.thesis_manager.repository.RoleRepository;
@@ -43,4 +44,11 @@ public class UserService {
 	public User saveUser(User user) {
 		return userRepository.save(user);
 	}
+
+	public void deleteUser(Integer id) {
+		userRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("User not found"));
+		userRepository.deleteById(id);
+	}
+
 }

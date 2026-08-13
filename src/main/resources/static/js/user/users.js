@@ -22,9 +22,24 @@ function renderUsers(users) {
 	users.forEach(function (user) {
 		let item = $('<li>').text(user.email);
 		let editBtn = $('<button>').text('Edit');
-		let deleteBtn = $('<button>').text('Delete');
+		let deleteBtn = $('<button>').text('Delete').on('click', function () {
+			deleteUser(user.id);
+		});
 
 		item.append(' ').append(editBtn).append(' ').append(deleteBtn);
 		list.append(item);
+	});
+}
+
+function deleteUser(userId) {
+	$.ajax({
+		url: '/api/users/' + userId,
+		method: 'DELETE',
+		success: function (users) {
+			fetchUsers();
+		},
+		error: function (jqXHR) {
+			console.log('Failed to delete user ' + jqXHR.status);
+		}
 	});
 }
