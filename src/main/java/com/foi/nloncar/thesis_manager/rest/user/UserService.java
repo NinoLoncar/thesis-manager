@@ -1,6 +1,8 @@
 package com.foi.nloncar.thesis_manager.rest.user;
 
 import com.foi.nloncar.thesis_manager.dto.CreateUserRequest;
+import com.foi.nloncar.thesis_manager.dto.UpdateUserRequest;
+import com.foi.nloncar.thesis_manager.dto.UserDetailsDto;
 import com.foi.nloncar.thesis_manager.dto.UserDto;
 import com.foi.nloncar.thesis_manager.exception.NotFoundException;
 import com.foi.nloncar.thesis_manager.model.Role;
@@ -49,6 +51,33 @@ public class UserService {
 		userRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("User not found"));
 		userRepository.deleteById(id);
+	}
+
+	public UserDetailsDto getUserById(Integer id) {
+		User user = userRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("User not found"));
+
+		List<Integer> roleIds = user.getRoles().stream().map(Role::getId).toList();
+		return new UserDetailsDto(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), roleIds);
+	}
+
+	public void updateUser(Integer id, UpdateUserRequest request) {
+		User user = userRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("User not found"));
+
+		List<Role> roles = roleRepository.findAllById(request.roleIds());
+
+		user.setEmail(request.email());
+		user.setFirstName(request.firstName());
+		user.setLastName(request.lastName());
+		user.getRoles().clear();
+		user.getRoles().addAll(roles);
+
+		if (request.password() != null && !request.password().isBlank()) {
+			user.setPassword(passwordHasher.hash(request.password()));
+		}
+
+		saveUser(user);
 	}
 
 }

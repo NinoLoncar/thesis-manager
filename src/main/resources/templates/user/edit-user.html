@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+	<title>Edit User</title>
+	<script th:inline="javascript">
+		const userId = /*[[${userId}]]*/ null;
+	</script>
+	<script src="/js/user/edit-user.js"></script>
+</head>
+<body>
+<main layout:fragment="content">
+	<h1>Edit User</h1>
+	<form>
+		<div>
+			<label for="email">Email</label>
+			<input type="email" id="email" name="email" required>
+		</div>
+		<div>
+			<label for="firstName">First name</label>
+			<input type="text" id="firstName" name="firstName" required>
+		</div>
+		<div>
+			<label for="lastName">Last name</label>
+			<input type="text" id="lastName" name="lastName" required>
+		</div>
+		<div>
+			<label for="password">New password (leave blank to keep current)</label>
+			<input type="password" id="password" name="password">
+		</div>
+		<div>
+			<span>Roles</span>
+			<div id="roles-list"></div>
+		</div>
+		<button id="save-user-btn">Save</button>
+	</form>
+</main>
+</body>
+</html>

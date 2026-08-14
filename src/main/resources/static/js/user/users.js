@@ -21,7 +21,9 @@ function renderUsers(users) {
 
 	users.forEach(function (user) {
 		let item = $('<li>').text(user.email);
-		let editBtn = $('<button>').text('Edit');
+		let editBtn = $('<button>').text('Edit').on('click', function () {
+			window.location.href = '/users/' + user.id + '/edit';
+		});
 		let deleteBtn = $('<button>').text('Delete').on('click', function () {
 			deleteUser(user.id);
 		});

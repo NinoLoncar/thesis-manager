@@ -11,11 +11,11 @@ import java.util.Set;
 
 public aspect ModelEnrichmentAspect {
 
-	declare precedence : RedirectAspect, ModelEnrichmentAspect;
+	declare precedence :RedirectAspect,ModelEnrichmentAspect;
 
 	Object around(Model model):
-			execution(* com.foi.nloncar.thesis_manager.gui..*.*(Model))
-					&& args(model) {
+			execution(* com.foi.nloncar.thesis_manager.gui..*.*(.., Model))
+					&& args(.., model) {
 
 		Integer userId = getCurrentUserId();
 		Set<String> permissions = userId != null
