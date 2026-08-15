@@ -1,11 +1,12 @@
-package com.foi.nloncar.thesis_manager.aspect;
+package com.foi.nloncar.thesis_manager.aspect.util;
 
-import com.foi.nloncar.thesis_manager.aspect.security.RedirectAspect;
+import com.foi.nloncar.thesis_manager.aspect.ApplicationContextHolder;
 import com.foi.nloncar.thesis_manager.rest.security.PermissionService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import com.foi.nloncar.thesis_manager.aspect.security.RedirectAspect;
 
 import java.util.Set;
 

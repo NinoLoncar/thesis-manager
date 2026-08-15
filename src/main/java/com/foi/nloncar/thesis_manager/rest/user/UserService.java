@@ -1,9 +1,9 @@
 package com.foi.nloncar.thesis_manager.rest.user;
 
-import com.foi.nloncar.thesis_manager.dto.CreateUserRequest;
-import com.foi.nloncar.thesis_manager.dto.UpdateUserRequest;
-import com.foi.nloncar.thesis_manager.dto.UserDetailsDto;
-import com.foi.nloncar.thesis_manager.dto.UserDto;
+import com.foi.nloncar.thesis_manager.dto.request.CreateUserRequest;
+import com.foi.nloncar.thesis_manager.dto.request.UpdateUserRequest;
+import com.foi.nloncar.thesis_manager.dto.resource.UserDetailsDto;
+import com.foi.nloncar.thesis_manager.dto.resource.UserDto;
 import com.foi.nloncar.thesis_manager.exception.NotFoundException;
 import com.foi.nloncar.thesis_manager.model.Role;
 import com.foi.nloncar.thesis_manager.model.User;

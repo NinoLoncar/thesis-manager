@@ -1,4 +1,4 @@
-package com.foi.nloncar.thesis_manager.dto;
+package com.foi.nloncar.thesis_manager.dto.resource;
 
 import java.util.List;
 

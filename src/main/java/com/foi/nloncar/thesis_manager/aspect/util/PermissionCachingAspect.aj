@@ -1,4 +1,4 @@
-package com.foi.nloncar.thesis_manager.aspect;
+package com.foi.nloncar.thesis_manager.aspect.util;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -14,7 +14,7 @@ public aspect PermissionCachingAspect {
 			.build();
 
 	Object around(Integer userId):
-			execution(* com.foi.nloncar.thesis_manager.rest.security.PermissionService.getPermissionsForUser(Integer))
+			execution(* com.foi.nloncar.thesis_manager.rest.security.PermissionService.getPermissionsForUser(java.lang.Integer))
 					&& args(userId) {
 
 		Set<String> cached = cache.getIfPresent(userId);

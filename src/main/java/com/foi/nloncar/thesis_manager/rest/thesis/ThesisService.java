@@ -1,8 +1,8 @@
 package com.foi.nloncar.thesis_manager.rest.thesis;
 
-import com.foi.nloncar.thesis_manager.dto.CreateThesisRequest;
-import com.foi.nloncar.thesis_manager.dto.ThesisDto;
-import com.foi.nloncar.thesis_manager.dto.UpdateThesisRequest;
+import com.foi.nloncar.thesis_manager.dto.request.CreateThesisRequest;
+import com.foi.nloncar.thesis_manager.dto.resource.ThesisDto;
+import com.foi.nloncar.thesis_manager.dto.request.UpdateThesisRequest;
 import com.foi.nloncar.thesis_manager.exception.NotFoundException;
 import com.foi.nloncar.thesis_manager.exception.ValidationException;
 import com.foi.nloncar.thesis_manager.model.Thesis;

@@ -1,6 +1,6 @@
 package com.foi.nloncar.thesis_manager.rest.role;
 
-import com.foi.nloncar.thesis_manager.dto.RoleDto;
+import com.foi.nloncar.thesis_manager.dto.resource.RoleDto;
 import com.foi.nloncar.thesis_manager.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 

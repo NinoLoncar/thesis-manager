@@ -1,5 +1,6 @@
-package com.foi.nloncar.thesis_manager.aspect;
+package com.foi.nloncar.thesis_manager.aspect.security;
 
+import com.foi.nloncar.thesis_manager.aspect.ApplicationContextHolder;
 import com.foi.nloncar.thesis_manager.exception.AuthenticationException;
 import com.foi.nloncar.thesis_manager.exception.AuthorizationException;
 import com.foi.nloncar.thesis_manager.rest.security.PermissionService;

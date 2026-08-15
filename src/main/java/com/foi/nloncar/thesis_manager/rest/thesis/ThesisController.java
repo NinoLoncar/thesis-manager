@@ -1,8 +1,8 @@
 package com.foi.nloncar.thesis_manager.rest.thesis;
 
 import com.foi.nloncar.thesis_manager.annotation.RequiresPermission;
-import com.foi.nloncar.thesis_manager.dto.CreateThesisRequest;
-import com.foi.nloncar.thesis_manager.dto.UpdateThesisRequest;
+import com.foi.nloncar.thesis_manager.dto.request.CreateThesisRequest;
+import com.foi.nloncar.thesis_manager.dto.request.UpdateThesisRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

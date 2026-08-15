@@ -1,17 +1,16 @@
 package com.foi.nloncar.thesis_manager.aspect.exception_handling;
 
-import com.foi.nloncar.thesis_manager.annotation.RequiresPermission;
-import com.foi.nloncar.thesis_manager.aspect.PermissionCheckAspect;
 import com.foi.nloncar.thesis_manager.exception.AuthenticationException;
 import com.foi.nloncar.thesis_manager.exception.AuthorizationException;
 import com.foi.nloncar.thesis_manager.exception.NotFoundException;
 import com.foi.nloncar.thesis_manager.exception.ValidationException;
-import com.foi.nloncar.thesis_manager.rest.security.AuthenticationController;
+import com.foi.nloncar.thesis_manager.annotation.RequiresPermission;
+import com.foi.nloncar.thesis_manager.aspect.security.PermissionCheckAspect;
 import org.springframework.http.ResponseEntity;
 
 public aspect ExceptionHandlingAspect {
 
-	declare precedence : ExceptionHandlingAspect, PermissionCheckAspect;
+	declare precedence :ExceptionHandlingAspect,PermissionCheckAspect;
 
 	pointcut protectedMethods():
 			execution(* AuthenticationController.login(..))

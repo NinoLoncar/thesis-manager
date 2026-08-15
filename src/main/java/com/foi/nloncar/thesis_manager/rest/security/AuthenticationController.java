@@ -1,6 +1,6 @@
 package com.foi.nloncar.thesis_manager.rest.security;
 
-import com.foi.nloncar.thesis_manager.dto.LoginRequest;
+import com.foi.nloncar.thesis_manager.dto.request.LoginRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

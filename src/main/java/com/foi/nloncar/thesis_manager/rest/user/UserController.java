@@ -1,8 +1,8 @@
 package com.foi.nloncar.thesis_manager.rest.user;
 
 import com.foi.nloncar.thesis_manager.annotation.RequiresPermission;
-import com.foi.nloncar.thesis_manager.dto.CreateUserRequest;
-import com.foi.nloncar.thesis_manager.dto.UpdateUserRequest;
+import com.foi.nloncar.thesis_manager.dto.request.CreateUserRequest;
+import com.foi.nloncar.thesis_manager.dto.request.UpdateUserRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

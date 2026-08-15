@@ -1,4 +1,4 @@
-package com.foi.nloncar.thesis_manager.aspect;
+package com.foi.nloncar.thesis_manager.aspect.audit;
 
 import com.foi.nloncar.thesis_manager.model.Auditable;
 import jakarta.servlet.http.HttpSession;
