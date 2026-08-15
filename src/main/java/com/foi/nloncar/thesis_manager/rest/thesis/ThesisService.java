@@ -11,6 +11,8 @@ import com.foi.nloncar.thesis_manager.repository.ThesisRepository;
 import com.foi.nloncar.thesis_manager.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ThesisService {
 
@@ -41,6 +43,14 @@ public class ThesisService {
 
 	public Thesis saveThesis(Thesis thesis) {
 		return thesisRepository.save(thesis);
+	}
+
+	public List<ThesisDto> getAllTheses(Integer mentorId) {
+		List<Thesis> theses = mentorId != null
+				? thesisRepository.findByMentorId(mentorId)
+				: thesisRepository.findAll();
+
+		return theses.stream().map(this::toDto).toList();
 	}
 
 	private ThesisDto toDto(Thesis thesis) {
