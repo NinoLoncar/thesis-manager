@@ -3,6 +3,7 @@ package com.foi.nloncar.thesis_manager.rest.thesis;
 import com.foi.nloncar.thesis_manager.dto.CreateThesisRequest;
 import com.foi.nloncar.thesis_manager.dto.ThesisDto;
 import com.foi.nloncar.thesis_manager.exception.NotFoundException;
+import com.foi.nloncar.thesis_manager.exception.ValidationException;
 import com.foi.nloncar.thesis_manager.model.Thesis;
 import com.foi.nloncar.thesis_manager.model.ThesisStatus;
 import com.foi.nloncar.thesis_manager.model.ThesisType;
@@ -51,6 +52,17 @@ public class ThesisService {
 				: thesisRepository.findAll();
 
 		return theses.stream().map(this::toDto).toList();
+	}
+
+	public void deleteThesis(Integer id) {
+		Thesis thesis = thesisRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Thesis not found"));
+
+		if (thesis.getStudent() != null) {
+			throw new ValidationException("Cannot delete a thesis that has a student assigned to it");
+		}
+
+		thesisRepository.deleteById(id);
 	}
 
 	private ThesisDto toDto(Thesis thesis) {
