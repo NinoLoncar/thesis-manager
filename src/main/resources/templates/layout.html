@@ -32,6 +32,10 @@
 			<li class="nav-item" th:if="${permissions.contains('THESIS_CREATE')}">
 				<a class="nav-link" href="/theses/mentored">Mentored Theses</a>
 			</li>
+
+			<li class="nav-item" th:if="${permissions.contains('THESES_READ')}">
+				<a class="nav-link" href="/theses">All Theses</a>
+			</li>
 		</ul>
 	</nav>
 	<main class="p-4 flex-grow-1" layout:fragment="content">

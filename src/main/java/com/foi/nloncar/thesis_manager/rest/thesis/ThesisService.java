@@ -47,12 +47,10 @@ public class ThesisService {
 		return thesisRepository.save(thesis);
 	}
 
-	public List<ThesisDto> getAllTheses(Integer mentorId) {
-		List<Thesis> theses = mentorId != null
-				? thesisRepository.findByMentorId(mentorId)
-				: thesisRepository.findAll();
-
-		return theses.stream().map(this::toDto).toList();
+	public List<ThesisDto> getAllTheses(Integer mentorId, String title, String mentorName, Boolean reserved) {
+		return thesisRepository.search(mentorId, title, mentorName, reserved).stream()
+				.map(this::toDto)
+				.toList();
 	}
 
 	public void deleteThesis(Integer id) {

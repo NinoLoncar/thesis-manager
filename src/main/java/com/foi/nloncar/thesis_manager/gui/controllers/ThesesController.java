@@ -29,4 +29,10 @@ public class ThesesController {
 		model.addAttribute("thesisId", id);
 		return "thesis/edit-thesis";
 	}
+
+	@GetMapping("/theses")
+	@RequiresPagePermission("THESES_READ")
+	public String allThesesPage(Model model) {
+		return "thesis/theses";
+	}
 }
