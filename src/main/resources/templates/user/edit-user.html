@@ -11,28 +11,28 @@
 <body>
 <main layout:fragment="content">
 	<h1>Edit User</h1>
-	<form>
-		<div>
-			<label for="email">Email</label>
-			<input type="email" id="email" name="email" required>
+	<form style="max-width: 500px;">
+		<div class="mb-3">
+			<label for="email" class="form-label">Email</label>
+			<input type="email" id="email" name="email" class="form-control" required>
 		</div>
-		<div>
-			<label for="firstName">First name</label>
-			<input type="text" id="firstName" name="firstName" required>
+		<div class="mb-3">
+			<label for="firstName" class="form-label">First name</label>
+			<input type="text" id="firstName" name="firstName" class="form-control" required>
 		</div>
-		<div>
-			<label for="lastName">Last name</label>
-			<input type="text" id="lastName" name="lastName" required>
+		<div class="mb-3">
+			<label for="lastName" class="form-label">Last name</label>
+			<input type="text" id="lastName" name="lastName" class="form-control" required>
 		</div>
-		<div>
-			<label for="password">New password (leave blank to keep current)</label>
-			<input type="password" id="password" name="password">
+		<div class="mb-3">
+			<label for="password" class="form-label">New password (leave blank to keep current)</label>
+			<input type="password" id="password" name="password" class="form-control">
 		</div>
-		<div>
-			<span>Roles</span>
+		<div class="mb-3">
+			<span class="form-label d-block">Roles</span>
 			<div id="roles-list"></div>
 		</div>
-		<button id="save-user-btn">Save</button>
+		<button id="save-user-btn" class="btn btn-primary">Save</button>
 	</form>
 </main>
 </body>

@@ -20,15 +20,19 @@ function renderUsers(users) {
 	list.empty();
 
 	users.forEach(function (user) {
-		let item = $('<li>').text(user.email);
-		let editBtn = $('<button>').text('Edit').on('click', function () {
+		let item = $('<li>')
+			.addClass('list-group-item d-flex justify-content-between align-items-center')
+			.text(user.email);
+
+		let editBtn = $('<button>').text('Edit').addClass('btn btn-sm btn-primary me-2').on('click', function () {
 			window.location.href = '/users/' + user.id + '/edit';
 		});
-		let deleteBtn = $('<button>').text('Delete').on('click', function () {
+		let deleteBtn = $('<button>').text('Delete').addClass('btn btn-sm btn-danger').on('click', function () {
 			deleteUser(user.id);
 		});
 
-		item.append(' ').append(editBtn).append(' ').append(deleteBtn);
+		let actions = $('<div>').append(editBtn).append(deleteBtn);
+		item.append(actions);
 		list.append(item);
 	});
 }

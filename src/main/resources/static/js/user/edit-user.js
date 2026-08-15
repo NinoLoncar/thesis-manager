@@ -70,15 +70,21 @@ function renderRoles(roles) {
 	container.empty();
 
 	roles.forEach(function (role) {
-		const label = $('<label>');
+		const wrapper = $('<div>').addClass('form-check');
 		const checkbox = $('<input>', {
 			type: 'checkbox',
-			class: 'role-checkbox',
+			class: 'role-checkbox form-check-input',
+			id: 'role-' + role.id,
 			value: role.id
 		});
+		const label = $('<label>', {
+			class: 'form-check-label',
+			for: 'role-' + role.id,
+			text: role.name
+		});
 
-		label.append(checkbox).append(' ' + role.name);
-		container.append(label).append('<br>');
+		wrapper.append(checkbox).append(label);
+		container.append(wrapper);
 	});
 }
 
