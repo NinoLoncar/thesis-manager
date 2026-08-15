@@ -2,6 +2,7 @@ package com.foi.nloncar.thesis_manager.rest.thesis;
 
 import com.foi.nloncar.thesis_manager.dto.CreateThesisRequest;
 import com.foi.nloncar.thesis_manager.dto.ThesisDto;
+import com.foi.nloncar.thesis_manager.dto.UpdateThesisRequest;
 import com.foi.nloncar.thesis_manager.exception.NotFoundException;
 import com.foi.nloncar.thesis_manager.exception.ValidationException;
 import com.foi.nloncar.thesis_manager.model.Thesis;
@@ -63,6 +64,23 @@ public class ThesisService {
 		}
 
 		thesisRepository.deleteById(id);
+	}
+
+	public ThesisDto getThesisById(Integer id) {
+		Thesis thesis = thesisRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Thesis not found"));
+		return toDto(thesis);
+	}
+
+	public ThesisDto updateThesis(Integer id, UpdateThesisRequest request) {
+		Thesis thesis = thesisRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Thesis not found"));
+
+		thesis.setTitle(request.title());
+		thesis.setAbstractText(request.abstractText());
+
+		Thesis saved = saveThesis(thesis);
+		return toDto(saved);
 	}
 
 	private ThesisDto toDto(Thesis thesis) {

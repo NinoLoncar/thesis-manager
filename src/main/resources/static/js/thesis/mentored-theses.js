@@ -26,7 +26,9 @@ function renderTheses(theses) {
 			.text(thesis.title);
 
 		const detailsBtn = $('<button>').text('Details').addClass('btn btn-sm btn-secondary me-2');
-		const editBtn = $('<button>').text('Edit').addClass('btn btn-sm btn-primary me-2');
+		const editBtn = $('<button>').text('Edit').addClass('btn btn-sm btn-primary me-2').on('click', function () {
+			window.location.href = '/theses/' + thesis.id + '/edit';
+		});
 		const deleteBtn = $('<button>').text('Delete').addClass('btn btn-sm btn-danger').on('click', function () {
 			deleteThesis(thesis.id);
 		});
