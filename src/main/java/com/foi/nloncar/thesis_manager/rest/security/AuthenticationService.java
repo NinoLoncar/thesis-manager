@@ -29,5 +29,6 @@ public class AuthenticationService {
 
 		session.setAttribute("userId", user.getId());
 		session.setAttribute("userEmail", user.getEmail());
+		session.setAttribute("userFullName", user.fullName());
 	}
 }

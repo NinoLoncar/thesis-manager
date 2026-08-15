@@ -21,4 +21,10 @@ public class AuthenticationController {
 		authenticationService.login(request, session);
 		return ResponseEntity.ok().body("Login successful");
 	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout(HttpSession session) {
+		session.invalidate();
+		return ResponseEntity.ok().body("Logout successful");
+	}
 }

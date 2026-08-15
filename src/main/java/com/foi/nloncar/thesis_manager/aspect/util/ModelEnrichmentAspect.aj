@@ -18,21 +18,22 @@ public aspect ModelEnrichmentAspect {
 			execution(* com.foi.nloncar.thesis_manager.gui..*.*(.., Model))
 					&& args(.., model) {
 
-		Integer userId = getCurrentUserId();
+		HttpSession session = currentSession();
+		Integer userId = (Integer) session.getAttribute("userId");
 		Set<String> permissions = userId != null
 				? permissionService().getPermissionsForUser(userId)
 				: Set.of();
 
 		model.addAttribute("permissions", permissions);
+		model.addAttribute("currentUserFullName", session.getAttribute("userFullName"));
 
 		return proceed(model);
 	}
 
-	private Integer getCurrentUserId() {
-		HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+	private HttpSession currentSession() {
+		return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 				.getRequest()
 				.getSession();
-		return (Integer) session.getAttribute("userId");
 	}
 
 	private PermissionService permissionService() {
