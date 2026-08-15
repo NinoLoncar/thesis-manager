@@ -24,6 +24,10 @@
 			<li class="nav-item" th:if="${permissions.contains('USER_CREATE')}">
 				<a class="nav-link" href="/users/create">Create user</a>
 			</li>
+
+			<li class="nav-item" th:if="${permissions.contains('THESIS_CREATE')}">
+				<a class="nav-link" href="/theses/create">Create thesis</a>
+			</li>
 		</ul>
 	</nav>
 	<main class="p-4 flex-grow-1" layout:fragment="content">

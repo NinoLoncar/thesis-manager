@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+	<title>Create Thesis</title>
+	<script src="/js/thesis/create-thesis.js"></script>
+</head>
+<body>
+<main layout:fragment="content">
+	<h1>Create Thesis</h1>
+	<form>
+		<div class="mb-3">
+			<label for="title" class="form-label">Title</label>
+			<input type="text" id="title" name="title" class="form-control" required>
+		</div>
+		<div class="mb-3">
+			<label for="abstractText" class="form-label">Abstract</label>
+			<textarea id="abstractText" name="abstractText" class="form-control" rows="5"></textarea>
+		</div>
+		<div class="mb-3">
+			<label for="type" class="form-label">Type</label>
+			<select id="type" name="type" class="form-select" required>
+				<option value="BACHELOR">Bachelor</option>
+				<option value="MASTER">Master</option>
+			</select>
+		</div>
+		<button id="create-thesis-btn" class="btn btn-primary">Create</button>
+	</form>
+</main>
+</body>
+</html>

@@ -94,4 +94,8 @@ public class User {
 		return roles;
 	}
 
+	public String fullName() {
+		return firstName + " " + lastName;
+	}
+
 }

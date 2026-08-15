@@ -1,6 +1,7 @@
 package com.foi.nloncar.thesis_manager.aspect;
 
 import com.foi.nloncar.thesis_manager.model.Auditable;
+import com.foi.nloncar.thesis_manager.model.Thesis;
 import com.foi.nloncar.thesis_manager.model.User;
 import jakarta.persistence.Column;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 public aspect AuditableImplementationAspect {
 
 	declare parents:User implements Auditable;
+	declare parents:Thesis implements Auditable;
 
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime Auditable.createdAt;
