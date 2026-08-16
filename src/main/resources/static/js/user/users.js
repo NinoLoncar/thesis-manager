@@ -10,7 +10,7 @@ function fetchUsers() {
 			renderUsers(users);
 		},
 		error: function (jqXHR) {
-			console.log('Failed to load users: ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		}
 	});
 }
@@ -45,7 +45,7 @@ function deleteUser(userId) {
 			fetchUsers();
 		},
 		error: function (jqXHR) {
-			console.log('Failed to delete user ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		}
 	});
 }

@@ -30,7 +30,7 @@ function fetchTheses() {
 			renderTheses(theses);
 		},
 		error: function (jqXHR) {
-			console.error('Failed to load theses: ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		}
 	});
 }

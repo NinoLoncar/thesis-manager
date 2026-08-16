@@ -12,7 +12,7 @@ $(function () {
 				loadThesis();
 			})
 			.fail(function (jqXHR) {
-				console.error('Failed to reserve thesis: ' + jqXHR.status);
+				showError(jqXHR.responseJSON.message);
 			});
 	});
 });
@@ -29,7 +29,7 @@ function loadThesis() {
 			}
 		},
 		error: function (jqXHR) {
-			console.error('Failed to load thesis: ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		}
 	});
 }
@@ -81,7 +81,7 @@ function cancelReservation(reservationId) {
 			loadThesis();
 		})
 		.fail(function (jqXHR) {
-			console.error('Failed to cancel reservation: ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		});
 }
 
@@ -94,7 +94,7 @@ function loadReservations() {
 			renderReservations(reservations);
 		},
 		error: function (jqXHR) {
-			console.error('Failed to load reservations: ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		}
 	});
 }
@@ -132,6 +132,6 @@ function updateReservation(id, action) {
 			loadThesis();
 		})
 		.fail(function (jqXHR) {
-			console.error('Failed to update reservation: ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		});
 }

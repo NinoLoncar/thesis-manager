@@ -1,6 +1,7 @@
 package com.foi.nloncar.thesis_manager.rest.security;
 
 import com.foi.nloncar.thesis_manager.dto.request.LoginRequest;
+import com.foi.nloncar.thesis_manager.dto.resource.MessageResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,14 +18,14 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpSession session) {
+	public ResponseEntity<MessageResponse> login(@RequestBody LoginRequest request, HttpSession session) {
 		authenticationService.login(request, session);
-		return ResponseEntity.ok().body("Login successful");
+		return ResponseEntity.ok().body(new MessageResponse("Login successful"));
 	}
 
 	@PostMapping("/logout")
-	public ResponseEntity<String> logout(HttpSession session) {
+	public ResponseEntity<MessageResponse> logout(HttpSession session) {
 		session.invalidate();
-		return ResponseEntity.ok().body("Logout successful");
+		return ResponseEntity.ok().body(new MessageResponse("Logout successful"));
 	}
 }

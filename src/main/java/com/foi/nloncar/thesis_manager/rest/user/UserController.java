@@ -3,6 +3,7 @@ package com.foi.nloncar.thesis_manager.rest.user;
 import com.foi.nloncar.thesis_manager.annotation.RequiresPermission;
 import com.foi.nloncar.thesis_manager.dto.request.CreateUserRequest;
 import com.foi.nloncar.thesis_manager.dto.request.UpdateUserRequest;
+import com.foi.nloncar.thesis_manager.dto.resource.MessageResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class UserController {
 	@RequiresPermission("USER_DELETE")
 	public ResponseEntity<?> deleteUser(@PathVariable("id") Integer userId) {
 		userService.deleteUser(userId);
-		return ResponseEntity.ok().body("User has been deleted");
+		return ResponseEntity.ok().body(new MessageResponse("User has been deleted"));
 	}
 
 	@GetMapping("/{id}")
@@ -44,7 +45,7 @@ public class UserController {
 	@PutMapping("/{id}")
 	@RequiresPermission("USER_EDIT")
 	public ResponseEntity<?> updateUser(@PathVariable("id") Integer userId, @RequestBody UpdateUserRequest request) {
-		return ResponseEntity.ok().body("User updated");
+		return ResponseEntity.ok().body(new MessageResponse("User updated"));
 	}
 
 }

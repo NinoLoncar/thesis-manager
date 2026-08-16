@@ -19,7 +19,7 @@ $(function () {
 				window.location.href = '/theses/mentored';
 			})
 			.fail(function (jqXHR) {
-				console.error('Failed to update thesis: ' + jqXHR.status);
+				showError(jqXHR.responseJSON.message);
 			});
 	});
 });
@@ -33,7 +33,7 @@ function loadThesis() {
 			$('#abstractText').val(thesis.abstractText);
 		},
 		error: function (jqXHR) {
-			console.error('Failed to load thesis: ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		}
 	});
 }

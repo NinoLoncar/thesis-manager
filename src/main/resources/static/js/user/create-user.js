@@ -26,7 +26,7 @@ $(function () {
 				window.location.href = '/users';
 			})
 			.fail(function (jqXHR) {
-				console.error('Failed to create user: ' + jqXHR.status);
+				showError(jqXHR.responseJSON.message);
 			});
 	});
 });
@@ -39,7 +39,7 @@ function loadRoles() {
 			renderRoles(roles);
 		},
 		error: function (jqXHR) {
-			console.error('Failed to load roles: ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		}
 	});
 }

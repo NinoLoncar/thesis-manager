@@ -28,7 +28,7 @@ $(function () {
 				window.location.href = '/users';
 			})
 			.fail(function (jqXHR) {
-				console.error('Failed to update user: ' + jqXHR.status);
+				showError(jqXHR.responseJSON.message);
 			});
 	});
 });
@@ -44,7 +44,7 @@ function loadUser() {
 			checkAssignedRoles(user.roleIds);
 		},
 		error: function (jqXHR) {
-			console.error('Failed to load user: ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		}
 	});
 }
@@ -60,7 +60,7 @@ function loadRoles(onComplete) {
 			}
 		},
 		error: function (jqXHR) {
-			console.error('Failed to load roles: ' + jqXHR.status);
+			showError(jqXHR.responseJSON.message);
 		}
 	});
 }

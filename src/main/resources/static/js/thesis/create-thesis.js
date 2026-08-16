@@ -18,7 +18,7 @@ $(function () {
 				window.location.href = '/';
 			})
 			.fail(function (jqXHR) {
-				console.error('Failed to create thesis: ' + jqXHR.status);
+				showError(jqXHR.responseJSON.message);
 			});
 	});
 });

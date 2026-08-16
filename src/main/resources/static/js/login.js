@@ -18,7 +18,7 @@ $(function () {
 				window.location.href = '/';
 			})
 			.fail(function (jqXHR) {
-				console.error('Login failed: ' + jqXHR.status);
+				showError(jqXHR.responseJSON.message);
 			});
 	});
 });

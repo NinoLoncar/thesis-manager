@@ -10,7 +10,7 @@ $(function () {
 				window.location.href = '/login';
 			})
 			.fail(function (jqXHR) {
-				console.error('Logout failed: ' + jqXHR.status);
+				showError(jqXHR.responseJSON.message);
 			});
 	});
 });

@@ -3,6 +3,7 @@ package com.foi.nloncar.thesis_manager.rest.thesis;
 import com.foi.nloncar.thesis_manager.annotation.RequiresPermission;
 import com.foi.nloncar.thesis_manager.dto.request.CreateThesisRequest;
 import com.foi.nloncar.thesis_manager.dto.request.UpdateThesisRequest;
+import com.foi.nloncar.thesis_manager.dto.resource.MessageResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,7 +47,7 @@ public class ThesisController {
 	@RequiresPermission("THESIS_DELETE")
 	public ResponseEntity<?> deleteThesis(@PathVariable("id") Integer id) {
 		thesisService.deleteThesis(id);
-		return ResponseEntity.ok().body("Thesis has been deleted");
+		return ResponseEntity.ok().body(new MessageResponse("Thesis has been deleted"));
 	}
 
 	@GetMapping("/{id}")
