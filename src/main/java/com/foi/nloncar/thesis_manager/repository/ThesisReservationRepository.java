@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ThesisReservationRepository extends JpaRepository<ThesisReservation, Integer> {
 	List<ThesisReservation> findByThesisId(Integer thesisId);
+
+	List<ThesisReservation> findByStudentId(Integer studentId);
 }

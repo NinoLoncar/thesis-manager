@@ -12,6 +12,7 @@ import com.foi.nloncar.thesis_manager.repository.ThesisRepository;
 import com.foi.nloncar.thesis_manager.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -58,6 +59,7 @@ public class ThesisReservationService {
 
 		Thesis thesis = reservation.getThesis();
 		thesis.setStudent(reservation.getStudent());
+		thesis.setReservedAt(LocalDateTime.now());
 		thesisRepository.save(thesis);
 
 		denyOtherPendingReservations(thesis.getId(), reservation.getId());

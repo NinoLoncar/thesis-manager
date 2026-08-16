@@ -40,7 +40,12 @@
 
 	<button id="reserve-btn" class="btn btn-success d-none">Reserve</button>
 
-	<div th:if="${permissions.contains('RESERVATION_MANAGE')}" class="mt-4">
+	<div id="my-reservation-section" class="d-none mt-3">
+		<p>Your reservation status: <strong id="my-reservation-status"></strong></p>
+		<button id="cancel-reservation-btn" class="btn btn-outline-danger btn-sm d-none">Cancel Reservation</button>
+	</div>
+
+	<div th:if="${permissions.contains('RESERVATION_MANAGE')}" id="reservations-section" class="mt-4">
 		<h2 class="h5">Reservations</h2>
 		<ul id="reservations-list" class="list-group"></ul>
 	</div>

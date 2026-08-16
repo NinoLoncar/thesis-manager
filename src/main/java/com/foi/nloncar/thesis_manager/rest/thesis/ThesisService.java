@@ -6,13 +6,16 @@ import com.foi.nloncar.thesis_manager.dto.request.UpdateThesisRequest;
 import com.foi.nloncar.thesis_manager.exception.NotFoundException;
 import com.foi.nloncar.thesis_manager.exception.ValidationException;
 import com.foi.nloncar.thesis_manager.model.Thesis;
+import com.foi.nloncar.thesis_manager.model.ThesisReservation;
 import com.foi.nloncar.thesis_manager.model.ThesisStatus;
 import com.foi.nloncar.thesis_manager.model.ThesisType;
 import com.foi.nloncar.thesis_manager.model.User;
+import com.foi.nloncar.thesis_manager.repository.ThesisReservationRepository;
 import com.foi.nloncar.thesis_manager.repository.ThesisRepository;
 import com.foi.nloncar.thesis_manager.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -20,10 +23,13 @@ public class ThesisService {
 
 	private final ThesisRepository thesisRepository;
 	private final UserRepository userRepository;
+	private final ThesisReservationRepository reservationRepository;
 
-	public ThesisService(ThesisRepository thesisRepository, UserRepository userRepository) {
+	public ThesisService(ThesisRepository thesisRepository, UserRepository userRepository,
+						  ThesisReservationRepository reservationRepository) {
 		this.thesisRepository = thesisRepository;
 		this.userRepository = userRepository;
+		this.reservationRepository = reservationRepository;
 	}
 
 	public ThesisDto createThesis(CreateThesisRequest request, Integer mentorId) {
@@ -40,7 +46,7 @@ public class ThesisService {
 		);
 
 		Thesis saved = saveThesis(thesis);
-		return toDto(saved);
+		return toDto(saved, null);
 	}
 
 	public Thesis saveThesis(Thesis thesis) {
@@ -49,7 +55,7 @@ public class ThesisService {
 
 	public List<ThesisDto> getAllTheses(Integer mentorId, String title, String mentorName, Boolean reserved) {
 		return thesisRepository.search(mentorId, title, mentorName, reserved).stream()
-				.map(this::toDto)
+				.map(thesis -> toDto(thesis, null))
 				.toList();
 	}
 
@@ -64,10 +70,10 @@ public class ThesisService {
 		thesisRepository.deleteById(id);
 	}
 
-	public ThesisDto getThesisById(Integer id) {
+	public ThesisDto getThesisById(Integer id, Integer currentUserId) {
 		Thesis thesis = thesisRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("Thesis not found"));
-		return toDto(thesis);
+		return toDto(thesis, currentUserId);
 	}
 
 	public ThesisDto updateThesis(Integer id, UpdateThesisRequest request) {
@@ -78,11 +84,18 @@ public class ThesisService {
 		thesis.setAbstractText(request.abstractText());
 
 		Thesis saved = saveThesis(thesis);
-		return toDto(saved);
+		return toDto(saved, null);
 	}
 
-	private ThesisDto toDto(Thesis thesis) {
+	private ThesisDto toDto(Thesis thesis, Integer currentUserId) {
 		User student = thesis.getStudent();
+
+		ThesisReservation myReservation = currentUserId != null
+				? reservationRepository.findByThesisId(thesis.getId()).stream()
+						.filter(reservation -> reservation.getStudent().getId().equals(currentUserId))
+						.max(Comparator.comparing(ThesisReservation::getId))
+						.orElse(null)
+				: null;
 
 		return new ThesisDto(
 				thesis.getId(),
@@ -93,7 +106,9 @@ public class ThesisService {
 				thesis.getMentor().getId(),
 				thesis.getMentor().fullName(),
 				student != null ? student.getId() : null,
-				student != null ? student.fullName() : null
+				student != null ? student.fullName() : null,
+				myReservation != null ? myReservation.getId() : null,
+				myReservation != null ? myReservation.getStatus().name() : null
 		);
 	}
 }

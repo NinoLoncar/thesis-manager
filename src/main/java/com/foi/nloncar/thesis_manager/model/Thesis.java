@@ -46,6 +46,9 @@ public class Thesis {
 	@Column(name = "approved_at")
 	private LocalDateTime approvedAt;
 
+	@Column(name = "reserved_at")
+	private LocalDateTime reservedAt;
+
 	public Thesis() {
 	}
 
@@ -120,5 +123,13 @@ public class Thesis {
 
 	public void setApprovedAt(LocalDateTime approvedAt) {
 		this.approvedAt = approvedAt;
+	}
+
+	public LocalDateTime getReservedAt() {
+		return reservedAt;
+	}
+
+	public void setReservedAt(LocalDateTime reservedAt) {
+		this.reservedAt = reservedAt;
 	}
 }

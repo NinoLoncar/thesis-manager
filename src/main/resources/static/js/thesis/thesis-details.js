@@ -1,16 +1,12 @@
 $(function () {
 	loadThesis();
 
-	if (canManageReservations) {
-		loadReservations();
-	}
-
 	$('#reserve-btn').on('click', function () {
 		$.ajax({
 			url: '/api/reservations',
 			method: 'POST',
 			contentType: 'application/json',
-			data: JSON.stringify({ thesisId: thesisId })
+			data: JSON.stringify({thesisId: thesisId})
 		})
 			.done(function () {
 				loadThesis();
@@ -27,6 +23,10 @@ function loadThesis() {
 		method: 'GET',
 		success: function (thesis) {
 			renderThesis(thesis);
+
+			if (canManageReservations && !thesis.studentId) {
+				loadReservations();
+			}
 		},
 		error: function (jqXHR) {
 			console.error('Failed to load thesis: ' + jqXHR.status);
@@ -42,18 +42,54 @@ function renderThesis(thesis) {
 	$('#thesis-mentor').text(thesis.mentorName);
 	$('#thesis-student').text(thesis.studentName || 'Not reserved');
 
-	if (canCreateReservation && !thesis.studentId) {
-		$('#reserve-btn').removeClass('d-none');
+	const hasOwnActiveReservation = thesis.myReservationStatus === 'PENDING' || thesis.myReservationStatus === 'APPROVED';
+
+	if (thesis.myReservationStatus) {
+		$('#my-reservation-section').removeClass('d-none');
+		$('#my-reservation-status').text(thesis.myReservationStatus);
+
+		if (thesis.myReservationStatus === 'PENDING') {
+			$('#cancel-reservation-btn').removeClass('d-none').off('click').on('click', function () {
+				cancelReservation(thesis.myReservationId);
+			});
+		} else {
+			$('#cancel-reservation-btn').addClass('d-none');
+		}
 	} else {
-		$('#reserve-btn').addClass('d-none');
+		$('#my-reservation-section').addClass('d-none');
 	}
+
+	if (thesis.studentId || hasOwnActiveReservation) {
+		$('#reserve-btn').addClass('d-none');
+	} else if (canCreateReservation) {
+		$('#reserve-btn').removeClass('d-none');
+	}
+
+	if (thesis.studentId) {
+		$('#reservations-section').addClass('d-none');
+	} else {
+		$('#reservations-section').removeClass('d-none');
+	}
+}
+
+function cancelReservation(reservationId) {
+	$.ajax({
+		url: '/api/reservations/' + reservationId + '/cancel',
+		method: 'PUT'
+	})
+		.done(function () {
+			loadThesis();
+		})
+		.fail(function (jqXHR) {
+			console.error('Failed to cancel reservation: ' + jqXHR.status);
+		});
 }
 
 function loadReservations() {
 	$.ajax({
 		url: '/api/reservations',
 		method: 'GET',
-		data: { thesisId: thesisId },
+		data: {thesisId: thesisId},
 		success: function (reservations) {
 			renderReservations(reservations);
 		},
@@ -93,11 +129,9 @@ function updateReservation(id, action) {
 		method: 'PUT'
 	})
 		.done(function () {
-			loadReservations();
 			loadThesis();
 		})
 		.fail(function (jqXHR) {
 			console.error('Failed to update reservation: ' + jqXHR.status);
-			alert(jqXHR.responseText || 'Failed to update reservation');
 		});
 }

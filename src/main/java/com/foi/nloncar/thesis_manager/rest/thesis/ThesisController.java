@@ -51,8 +51,9 @@ public class ThesisController {
 
 	@GetMapping("/{id}")
 	@RequiresPermission("THESES_READ")
-	public ResponseEntity<?> getThesis(@PathVariable("id") Integer id) {
-		return ResponseEntity.ok().body(thesisService.getThesisById(id));
+	public ResponseEntity<?> getThesis(@PathVariable("id") Integer id, HttpSession session) {
+		Integer currentUserId = (Integer) session.getAttribute("userId");
+		return ResponseEntity.ok().body(thesisService.getThesisById(id, currentUserId));
 	}
 
 	@PutMapping("/{id}")
