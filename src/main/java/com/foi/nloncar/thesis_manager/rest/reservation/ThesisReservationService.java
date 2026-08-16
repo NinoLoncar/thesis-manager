@@ -2,7 +2,9 @@ package com.foi.nloncar.thesis_manager.rest.reservation;
 
 import com.foi.nloncar.thesis_manager.dto.request.CreateReservationRequest;
 import com.foi.nloncar.thesis_manager.dto.resource.ThesisReservationDto;
+import com.foi.nloncar.thesis_manager.exception.AuthorizationException;
 import com.foi.nloncar.thesis_manager.exception.NotFoundException;
+import com.foi.nloncar.thesis_manager.exception.ValidationException;
 import com.foi.nloncar.thesis_manager.model.Thesis;
 import com.foi.nloncar.thesis_manager.model.ThesisReservation;
 import com.foi.nloncar.thesis_manager.model.ThesisReservationStatus;
@@ -31,6 +33,8 @@ public class ThesisReservationService {
 	}
 
 	public ThesisReservationDto createReservation(CreateReservationRequest request, Integer studentId) {
+		validateCreate(request, studentId);
+
 		User student = userRepository.findById(studentId).orElseThrow(
 				() -> new NotFoundException("Student not found"));
 		Thesis thesis = thesisRepository.findById(request.thesisId()).orElseThrow(
@@ -50,9 +54,11 @@ public class ThesisReservationService {
 		return reservationRepository.findByThesisId(thesisId).stream().map(this::toDto).toList();
 	}
 
-	public ThesisReservationDto approveReservation(Integer id) {
+	public ThesisReservationDto approveReservation(Integer id, Integer currentUserId) {
 		ThesisReservation reservation = reservationRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("Reservation not found"));
+
+		validateDecision(reservation, currentUserId);
 
 		reservation.setStatus(ThesisReservationStatus.APPROVED);
 		ThesisReservation saved = saveReservation(reservation);
@@ -67,17 +73,21 @@ public class ThesisReservationService {
 		return toDto(saved);
 	}
 
-	public ThesisReservationDto denyReservation(Integer id) {
+	public ThesisReservationDto denyReservation(Integer id, Integer currentUserId) {
 		ThesisReservation reservation = reservationRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("Reservation not found"));
+
+		validateDecision(reservation, currentUserId);
 
 		reservation.setStatus(ThesisReservationStatus.DENIED);
 		return toDto(saveReservation(reservation));
 	}
 
-	public ThesisReservationDto cancelReservation(Integer id) {
+	public ThesisReservationDto cancelReservation(Integer id, Integer currentUserId) {
 		ThesisReservation reservation = reservationRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("Reservation not found"));
+
+		validateCancel(reservation, currentUserId);
 
 		reservation.setStatus(ThesisReservationStatus.CANCELED);
 		return toDto(saveReservation(reservation));
@@ -92,6 +102,43 @@ public class ThesisReservationService {
 		for (ThesisReservation reservation : pending) {
 			reservation.setStatus(ThesisReservationStatus.DENIED);
 			saveReservation(reservation);
+		}
+	}
+
+	private void validateCreate(CreateReservationRequest request, Integer studentId) {
+		boolean hasActiveReservation = reservationRepository.findByStudentId(studentId).stream()
+				.anyMatch(reservation -> reservation.getStatus() == ThesisReservationStatus.PENDING
+						|| reservation.getStatus() == ThesisReservationStatus.APPROVED);
+
+		if (hasActiveReservation) {
+			throw new ValidationException("You already have a pending or approved reservation");
+		}
+
+		Thesis thesis = thesisRepository.findById(request.thesisId()).orElseThrow(
+				() -> new NotFoundException("Thesis not found"));
+
+		if (thesis.getStudent() != null) {
+			throw new ValidationException("This thesis is already reserved");
+		}
+	}
+
+	private void validateCancel(ThesisReservation reservation, Integer currentUserId) {
+		if (!reservation.getStudent().getId().equals(currentUserId)) {
+			throw new AuthorizationException("You can only cancel your own reservation");
+		}
+
+		if (reservation.getStatus() != ThesisReservationStatus.PENDING) {
+			throw new ValidationException("Only pending reservations can be canceled");
+		}
+	}
+
+	private void validateDecision(ThesisReservation reservation, Integer currentUserId) {
+		if (!reservation.getThesis().getMentor().getId().equals(currentUserId)) {
+			throw new AuthorizationException("Only the thesis's mentor can approve or deny reservations");
+		}
+
+		if (reservation.getStatus() != ThesisReservationStatus.PENDING) {
+			throw new ValidationException("Only pending reservations can be approved or denied");
 		}
 	}
 

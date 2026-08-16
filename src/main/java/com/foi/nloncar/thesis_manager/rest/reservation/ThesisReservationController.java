@@ -38,19 +38,22 @@ public class ThesisReservationController {
 
 	@PutMapping("/{id}/approve")
 	@RequiresPermission("RESERVATION_MANAGE")
-	public ResponseEntity<?> approveReservation(@PathVariable("id") Integer id) {
-		return ResponseEntity.ok().body(reservationService.approveReservation(id));
+	public ResponseEntity<?> approveReservation(@PathVariable("id") Integer id, HttpSession session) {
+		Integer currentUserId = (Integer) session.getAttribute("userId");
+		return ResponseEntity.ok().body(reservationService.approveReservation(id, currentUserId));
 	}
 
 	@PutMapping("/{id}/deny")
 	@RequiresPermission("RESERVATION_MANAGE")
-	public ResponseEntity<?> denyReservation(@PathVariable("id") Integer id) {
-		return ResponseEntity.ok().body(reservationService.denyReservation(id));
+	public ResponseEntity<?> denyReservation(@PathVariable("id") Integer id, HttpSession session) {
+		Integer currentUserId = (Integer) session.getAttribute("userId");
+		return ResponseEntity.ok().body(reservationService.denyReservation(id, currentUserId));
 	}
 
 	@PutMapping("/{id}/cancel")
 	@RequiresPermission("RESERVATION_CREATE")
-	public ResponseEntity<?> cancelReservation(@PathVariable("id") Integer id) {
-		return ResponseEntity.ok().body(reservationService.cancelReservation(id));
+	public ResponseEntity<?> cancelReservation(@PathVariable("id") Integer id, HttpSession session) {
+		Integer currentUserId = (Integer) session.getAttribute("userId");
+		return ResponseEntity.ok().body(reservationService.cancelReservation(id, currentUserId));
 	}
 }
