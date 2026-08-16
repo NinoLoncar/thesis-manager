@@ -35,4 +35,11 @@ public class ThesesController {
 	public String allThesesPage(Model model) {
 		return "thesis/theses";
 	}
+
+	@GetMapping("/theses/{id}")
+	@RequiresPagePermission("THESES_READ")
+	public String thesisDetailsPage(@PathVariable("id") Integer id, Model model) {
+		model.addAttribute("thesisId", id);
+		return "thesis/thesis-details";
+	}
 }

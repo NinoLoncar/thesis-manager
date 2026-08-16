@@ -11,7 +11,8 @@ public aspect AuditingAspect {
 
 	Object around(Auditable entity):
 			(execution(* com.foi.nloncar.thesis_manager.rest.user.UserService.saveUser(..))
-					|| execution(* com.foi.nloncar.thesis_manager.rest.thesis.ThesisService.saveThesis(..)))
+					|| execution(* com.foi.nloncar.thesis_manager.rest.thesis.ThesisService.saveThesis(..))
+					|| execution(* com.foi.nloncar.thesis_manager.rest.reservation.ThesisReservationService.saveReservation(..)))
 					&& args(entity) {
 
 		LocalDateTime now = LocalDateTime.now();

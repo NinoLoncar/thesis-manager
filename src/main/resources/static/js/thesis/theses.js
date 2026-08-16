@@ -44,7 +44,9 @@ function renderTheses(theses) {
 			.addClass('list-group-item d-flex justify-content-between align-items-center')
 			.text(thesis.title + ' (' + thesis.mentorName + ')');
 
-		const detailsBtn = $('<button>').text('Details').addClass('btn btn-sm btn-secondary');
+		const detailsBtn = $('<button>').text('Details').addClass('btn btn-sm btn-secondary').on('click', function () {
+			window.location.href = '/theses/' + thesis.id;
+		});
 
 		item.append(detailsBtn);
 		list.append(item);

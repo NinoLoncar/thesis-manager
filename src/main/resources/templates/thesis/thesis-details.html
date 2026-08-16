@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+	<title>Thesis Details</title>
+	<script th:inline="javascript">
+		const thesisId = /*[[${thesisId}]]*/ null;
+		const canCreateReservation = /*[[${permissions.contains('RESERVATION_CREATE')}]]*/ false;
+		const canManageReservations = /*[[${permissions.contains('RESERVATION_MANAGE')}]]*/ false;
+	</script>
+	<script src="/js/thesis/thesis-details.js"></script>
+</head>
+<body>
+<main layout:fragment="content">
+	<h1 id="thesis-title">Thesis Details</h1>
+	<table class="table w-auto">
+		<tbody>
+		<tr>
+			<th scope="row">Abstract</th>
+			<td id="thesis-abstract"></td>
+		</tr>
+		<tr>
+			<th scope="row">Type</th>
+			<td id="thesis-type"></td>
+		</tr>
+		<tr>
+			<th scope="row">Status</th>
+			<td id="thesis-status"></td>
+		</tr>
+		<tr>
+			<th scope="row">Mentor</th>
+			<td id="thesis-mentor"></td>
+		</tr>
+		<tr>
+			<th scope="row">Student</th>
+			<td id="thesis-student">Not reserved</td>
+		</tr>
+		</tbody>
+	</table>
+
+	<button id="reserve-btn" class="btn btn-success d-none">Reserve</button>
+
+	<div th:if="${permissions.contains('RESERVATION_MANAGE')}" class="mt-4">
+		<h2 class="h5">Reservations</h2>
+		<ul id="reservations-list" class="list-group"></ul>
+	</div>
+</main>
+</body>
+</html>

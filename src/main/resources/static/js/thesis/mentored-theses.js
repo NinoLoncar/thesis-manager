@@ -25,7 +25,9 @@ function renderTheses(theses) {
 			.addClass('list-group-item d-flex justify-content-between align-items-center')
 			.text(thesis.title);
 
-		const detailsBtn = $('<button>').text('Details').addClass('btn btn-sm btn-secondary me-2');
+		const detailsBtn = $('<button>').text('Details').addClass('btn btn-sm btn-secondary me-2').on('click', function () {
+			window.location.href = '/theses/' + thesis.id;
+		});
 		const editBtn = $('<button>').text('Edit').addClass('btn btn-sm btn-primary me-2').on('click', function () {
 			window.location.href = '/theses/' + thesis.id + '/edit';
 		});
