@@ -13,6 +13,8 @@
 <body>
 <main layout:fragment="content">
 	<h1 id="thesis-title">Thesis Details</h1>
+	<a th:if="${permissions.contains('SUBMISSIONS_READ')}" th:href="@{/theses/{id}/submissions(id=${thesisId})}"
+	   class="btn btn-outline-secondary btn-sm mb-3">View Submissions</a>
 	<table class="table w-auto">
 		<tbody>
 		<tr>

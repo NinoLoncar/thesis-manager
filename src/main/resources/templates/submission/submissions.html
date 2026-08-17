@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+	<title>Thesis Submissions</title>
+	<script th:inline="javascript">
+		const thesisId = /*[[${thesisId}]]*/ null;
+	</script>
+	<script src="/js/submission/submissions.js"></script>
+</head>
+<body>
+<main layout:fragment="content">
+	<h1>Submissions</h1>
+	<ul id="submissions-list" class="list-group"></ul>
+</main>
+</body>
+</html>

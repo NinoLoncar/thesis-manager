@@ -42,4 +42,11 @@ public class ThesesController {
 		model.addAttribute("thesisId", id);
 		return "thesis/thesis-details";
 	}
+
+	@GetMapping("/theses/{id}/submissions")
+	@RequiresPagePermission("SUBMISSIONS_READ")
+	public String submissionsPage(@PathVariable("id") Integer id, Model model) {
+		model.addAttribute("thesisId", id);
+		return "submission/submissions";
+	}
 }
