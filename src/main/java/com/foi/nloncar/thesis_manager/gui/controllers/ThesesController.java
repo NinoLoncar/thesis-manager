@@ -38,8 +38,9 @@ public class ThesesController {
 
 	@GetMapping("/theses/{id}")
 	@RequiresPagePermission("THESES_READ")
-	public String thesisDetailsPage(@PathVariable("id") Integer id, Model model) {
+	public String thesisDetailsPage(@PathVariable("id") Integer id, HttpSession session, Model model) {
 		model.addAttribute("thesisId", id);
+		model.addAttribute("currentUserId", session.getAttribute("userId"));
 		return "thesis/thesis-details";
 	}
 
@@ -48,5 +49,12 @@ public class ThesesController {
 	public String submissionsPage(@PathVariable("id") Integer id, Model model) {
 		model.addAttribute("thesisId", id);
 		return "submission/submissions";
+	}
+
+	@GetMapping("/theses/{id}/submissions/create")
+	@RequiresPagePermission("SUBMISSION_CREATE")
+	public String createSubmissionPage(@PathVariable("id") Integer id, Model model) {
+		model.addAttribute("thesisId", id);
+		return "submission/create-submission";
 	}
 }

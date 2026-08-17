@@ -70,6 +70,12 @@ function renderThesis(thesis) {
 	} else {
 		$('#reservations-section').removeClass('d-none');
 	}
+
+	if (canCreateSubmission && thesis.studentId === currentUserId) {
+		$('#create-submission-link').removeClass('d-none');
+	} else {
+		$('#create-submission-link').addClass('d-none');
+	}
 }
 
 function cancelReservation(reservationId) {

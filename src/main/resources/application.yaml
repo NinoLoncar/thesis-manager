@@ -5,3 +5,6 @@ spring:
     url:
     username:
     password:
+app:
+  storage:
+    root:
