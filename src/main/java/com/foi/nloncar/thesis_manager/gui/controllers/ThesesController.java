@@ -57,4 +57,13 @@ public class ThesesController {
 		model.addAttribute("thesisId", id);
 		return "submission/create-submission";
 	}
+
+	@GetMapping("/theses/{id}/submissions/{submissionId}")
+	@RequiresPagePermission("SUBMISSIONS_READ")
+	public String submissionDetailsPage(@PathVariable("id") Integer id,
+										 @PathVariable("submissionId") Integer submissionId,
+										 Model model) {
+		model.addAttribute("submissionId", submissionId);
+		return "submission/submission-details";
+	}
 }

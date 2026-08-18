@@ -3,9 +3,12 @@ package com.foi.nloncar.thesis_manager.rest.submission;
 import com.foi.nloncar.thesis_manager.annotation.RequiresPermission;
 import com.foi.nloncar.thesis_manager.dto.resource.MessageResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +29,23 @@ public class ThesisSubmissionController {
 	@RequiresPermission("SUBMISSIONS_READ")
 	public ResponseEntity<?> getSubmissions(@RequestParam(name = "thesisId") Integer thesisId) {
 		return ResponseEntity.ok().body(submissionService.getSubmissionsForThesis(thesisId));
+	}
+
+	@GetMapping("/{id}")
+	@RequiresPermission("SUBMISSIONS_READ")
+	public ResponseEntity<?> getSubmission(@PathVariable("id") Integer id) {
+		return ResponseEntity.ok().body(submissionService.getSubmissionById(id));
+	}
+
+	@GetMapping("/{id}/download")
+	@RequiresPermission("SUBMISSIONS_READ")
+	public ResponseEntity<Resource> downloadSubmission(@PathVariable("id") Integer id) {
+		SubmissionFile file = submissionService.loadFile(id);
+
+		return ResponseEntity.ok()
+				.contentType(MediaType.APPLICATION_PDF)
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.fileName() + "\"")
+				.body(file.resource());
 	}
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

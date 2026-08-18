@@ -9,9 +9,14 @@ import com.foi.nloncar.thesis_manager.model.ThesisSubmission;
 import com.foi.nloncar.thesis_manager.model.ThesisSubmissionStatus;
 import com.foi.nloncar.thesis_manager.repository.ThesisRepository;
 import com.foi.nloncar.thesis_manager.repository.ThesisSubmissionRepository;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Path;
 import java.util.List;
 
 @Service
@@ -33,6 +38,26 @@ public class ThesisSubmissionService {
 		return submissionRepository.findByThesisIdOrderByVersionDesc(thesisId).stream()
 				.map(this::toDto)
 				.toList();
+	}
+
+	public ThesisSubmissionDto getSubmissionById(Integer id) {
+		return toDto(getSubmissionEntity(id));
+	}
+
+	public ThesisSubmission getSubmissionEntity(Integer id) {
+		return submissionRepository.findById(id).orElseThrow(
+				() -> new NotFoundException("Submission not found"));
+	}
+
+	public SubmissionFile loadFile(Integer id) {
+		ThesisSubmission submission = getSubmissionEntity(id);
+
+		try {
+			Resource resource = new UrlResource(Path.of(submission.getFilePath()).toUri());
+			return new SubmissionFile(resource, submission.getFileName());
+		} catch (IOException e) {
+			throw new UncheckedIOException("Failed to read file", e);
+		}
 	}
 
 	public void createSubmission(Integer thesisId, String description, MultipartFile file, Integer currentUserId) {

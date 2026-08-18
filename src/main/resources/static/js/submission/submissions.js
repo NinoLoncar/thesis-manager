@@ -47,6 +47,11 @@ function renderSubmissions(submissions) {
 			item.append($('<div>').append(reviewInfo));
 		}
 
+		const detailsBtn = $('<button>').text('Details').addClass('btn btn-sm btn-secondary mt-2').on('click', function () {
+			window.location.href = '/theses/' + thesisId + '/submissions/' + submission.id;
+		});
+		item.append(detailsBtn);
+
 		list.append(item);
 	});
 }
