@@ -43,8 +43,8 @@ public class Thesis {
 	@JoinColumn(name = "mentor_id", nullable = false)
 	private User mentor;
 
-	@Column(name = "approved_at")
-	private LocalDateTime approvedAt;
+	@Column(name = "submitted_at")
+	private LocalDateTime submittedAt;
 
 	@Column(name = "reserved_at")
 	private LocalDateTime reservedAt;
@@ -117,12 +117,12 @@ public class Thesis {
 		this.mentor = mentor;
 	}
 
-	public LocalDateTime getApprovedAt() {
-		return approvedAt;
+	public LocalDateTime getSubmittedAt() {
+		return submittedAt;
 	}
 
-	public void setApprovedAt(LocalDateTime approvedAt) {
-		this.approvedAt = approvedAt;
+	public void setSubmittedAt(LocalDateTime submittedAt) {
+		this.submittedAt = submittedAt;
 	}
 
 	public LocalDateTime getReservedAt() {

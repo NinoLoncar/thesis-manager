@@ -7,6 +7,7 @@
 		const submissionId = /*[[${submissionId}]]*/ null;
 		const currentUserId = /*[[${currentUserId}]]*/ null;
 		const canCreateComment = /*[[${permissions.contains('COMMENT_CREATE')}]]*/ false;
+		const canReviewSubmission = /*[[${permissions.contains('SUBMISSION_REVIEW')}]]*/ false;
 	</script>
 	<script src="/js/submission/submission-details.js"></script>
 </head>
@@ -43,6 +44,11 @@
 	</table>
 
 	<a id="download-link" class="btn btn-primary" href="#" download>Download</a>
+
+	<div id="review-actions" class="mt-3 d-none">
+		<button id="request-changes-btn" class="btn btn-outline-warning">Request Changes</button>
+		<button id="accept-btn" class="btn btn-success">Accept as Final Version</button>
+	</div>
 
 	<div class="mt-4">
 		<h2 class="h5">Comments</h2>

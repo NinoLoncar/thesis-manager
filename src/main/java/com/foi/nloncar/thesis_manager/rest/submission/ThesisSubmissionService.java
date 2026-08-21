@@ -1,14 +1,18 @@
 package com.foi.nloncar.thesis_manager.rest.submission;
 
 import com.foi.nloncar.thesis_manager.dto.resource.ThesisSubmissionDto;
+import com.foi.nloncar.thesis_manager.dto.resource.MessageResponse;
 import com.foi.nloncar.thesis_manager.exception.AuthorizationException;
 import com.foi.nloncar.thesis_manager.exception.NotFoundException;
 import com.foi.nloncar.thesis_manager.exception.ValidationException;
 import com.foi.nloncar.thesis_manager.model.Thesis;
+import com.foi.nloncar.thesis_manager.model.ThesisStatus;
 import com.foi.nloncar.thesis_manager.model.ThesisSubmission;
 import com.foi.nloncar.thesis_manager.model.ThesisSubmissionStatus;
+import com.foi.nloncar.thesis_manager.model.User;
 import com.foi.nloncar.thesis_manager.repository.ThesisRepository;
 import com.foi.nloncar.thesis_manager.repository.ThesisSubmissionRepository;
+import com.foi.nloncar.thesis_manager.repository.UserRepository;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,13 +29,16 @@ public class ThesisSubmissionService {
 
 	private final ThesisSubmissionRepository submissionRepository;
 	private final ThesisRepository thesisRepository;
+	private final UserRepository userRepository;
 	private final FileStorageService fileStorageService;
 
 	public ThesisSubmissionService(ThesisSubmissionRepository submissionRepository,
 								   ThesisRepository thesisRepository,
+								   UserRepository userRepository,
 								   FileStorageService fileStorageService) {
 		this.submissionRepository = submissionRepository;
 		this.thesisRepository = thesisRepository;
+		this.userRepository = userRepository;
 		this.fileStorageService = fileStorageService;
 	}
 
@@ -68,6 +76,14 @@ public class ThesisSubmissionService {
 			throw new AuthorizationException("Only the thesis's assigned student can submit a version");
 		}
 
+		if (thesis.getStatus() == ThesisStatus.SUBMITTED) {
+			throw new ValidationException("This thesis has already been submitted and accepted");
+		}
+
+		if (submissionRepository.existsByThesisIdAndStatus(thesisId, ThesisSubmissionStatus.UNDER_REVIEW)) {
+			throw new ValidationException("A previous version is still under review");
+		}
+
 		if (!"application/pdf".equals(file.getContentType())) {
 			throw new ValidationException("Only PDF files are allowed");
 		}
@@ -92,6 +108,51 @@ public class ThesisSubmissionService {
 		);
 
 		submissionRepository.save(submission);
+	}
+
+	public MessageResponse acceptSubmission(Integer id, Integer currentUserId) {
+		ThesisSubmission submission = getSubmissionEntity(id);
+		validateReview(submission, currentUserId);
+
+		User reviewer = userRepository.findById(currentUserId).orElseThrow(
+				() -> new NotFoundException("User not found"));
+
+		submission.setStatus(ThesisSubmissionStatus.ACCEPTED);
+		submission.setReviewedBy(reviewer);
+		submission.setReviewedAt(LocalDateTime.now());
+		submissionRepository.save(submission);
+
+		Thesis thesis = submission.getThesis();
+		thesis.setStatus(ThesisStatus.SUBMITTED);
+		thesis.setSubmittedAt(LocalDateTime.now());
+		thesisRepository.save(thesis);
+
+		return new MessageResponse("Submission accepted as the final version");
+	}
+
+	public MessageResponse requestChanges(Integer id, Integer currentUserId) {
+		ThesisSubmission submission = getSubmissionEntity(id);
+		validateReview(submission, currentUserId);
+
+		User reviewer = userRepository.findById(currentUserId).orElseThrow(
+				() -> new NotFoundException("User not found"));
+
+		submission.setStatus(ThesisSubmissionStatus.CHANGES_REQUESTED);
+		submission.setReviewedBy(reviewer);
+		submission.setReviewedAt(LocalDateTime.now());
+		submissionRepository.save(submission);
+
+		return new MessageResponse("Changes requested");
+	}
+
+	private void validateReview(ThesisSubmission submission, Integer currentUserId) {
+		if (!submission.getThesis().getMentor().getId().equals(currentUserId)) {
+			throw new AuthorizationException("Only the thesis's mentor can review submissions");
+		}
+
+		if (submission.getStatus() != ThesisSubmissionStatus.UNDER_REVIEW) {
+			throw new ValidationException("Only submissions under review can be reviewed");
+		}
 	}
 
 	private String formatString(String value) {

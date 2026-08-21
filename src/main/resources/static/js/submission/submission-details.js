@@ -1,3 +1,5 @@
+let currentSubmission = null;
+
 $(function () {
 	loadSubmission();
 	loadComments();
@@ -6,6 +8,16 @@ $(function () {
 		event.preventDefault();
 		submitComment();
 	});
+
+	$('#request-changes-btn').on('click', function () {
+		reviewSubmission('request-changes');
+	});
+
+	$('#accept-btn').on('click', function () {
+		if (confirm('This will mark the thesis as submitted and no further versions will be accepted. Accept this version as the final one?')) {
+			reviewSubmission('accept');
+		}
+	});
 });
 
 function loadSubmission() {
@@ -13,8 +25,9 @@ function loadSubmission() {
 		url: '/api/submissions/' + submissionId,
 		method: 'GET',
 		success: function (submission) {
+			currentSubmission = submission;
 			renderSubmission(submission);
-			checkCommentPermission(submission.thesisId);
+			checkThesisOwnership(submission.thesisId);
 		},
 		error: function (jqXHR) {
 			showError(jqXHR.responseJSON.message);
@@ -34,20 +47,35 @@ function renderSubmission(submission) {
 	$('#download-link').attr('href', '/api/submissions/' + submissionId + '/download');
 }
 
-function checkCommentPermission(thesisId) {
+function checkThesisOwnership(thesisId) {
 	$.ajax({
 		url: '/api/theses/' + thesisId,
 		method: 'GET',
 		success: function (thesis) {
 			const isOwner = thesis.mentorId === currentUserId || thesis.studentId === currentUserId;
-			if (canCreateComment && isOwner) {
-				$('#comment-form').removeClass('d-none');
-			}
+			$('#comment-form').toggleClass('d-none', !(canCreateComment && isOwner));
+
+			const isMentor = thesis.mentorId === currentUserId;
+			const canReviewNow = canReviewSubmission && isMentor && currentSubmission.status === 'UNDER_REVIEW';
+			$('#review-actions').toggleClass('d-none', !canReviewNow);
 		},
 		error: function (jqXHR) {
 			showError(jqXHR.responseJSON.message);
 		}
 	});
+}
+
+function reviewSubmission(action) {
+	$.ajax({
+		url: '/api/submissions/' + submissionId + '/' + action,
+		method: 'PUT'
+	})
+		.done(function () {
+			loadSubmission();
+		})
+		.fail(function (jqXHR) {
+			showError(jqXHR.responseJSON.message);
+		});
 }
 
 function loadComments() {

@@ -1,6 +1,7 @@
 package com.foi.nloncar.thesis_manager.rest.reservation;
 
 import com.foi.nloncar.thesis_manager.dto.request.CreateReservationRequest;
+import com.foi.nloncar.thesis_manager.dto.resource.MessageResponse;
 import com.foi.nloncar.thesis_manager.dto.resource.ThesisReservationDto;
 import com.foi.nloncar.thesis_manager.exception.AuthorizationException;
 import com.foi.nloncar.thesis_manager.exception.NotFoundException;
@@ -8,6 +9,7 @@ import com.foi.nloncar.thesis_manager.exception.ValidationException;
 import com.foi.nloncar.thesis_manager.model.Thesis;
 import com.foi.nloncar.thesis_manager.model.ThesisReservation;
 import com.foi.nloncar.thesis_manager.model.ThesisReservationStatus;
+import com.foi.nloncar.thesis_manager.model.ThesisStatus;
 import com.foi.nloncar.thesis_manager.model.User;
 import com.foi.nloncar.thesis_manager.repository.ThesisReservationRepository;
 import com.foi.nloncar.thesis_manager.repository.ThesisRepository;
@@ -54,43 +56,46 @@ public class ThesisReservationService {
 		return reservationRepository.findByThesisId(thesisId).stream().map(this::toDto).toList();
 	}
 
-	public ThesisReservationDto approveReservation(Integer id, Integer currentUserId) {
+	public MessageResponse approveReservation(Integer id, Integer currentUserId) {
 		ThesisReservation reservation = reservationRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("Reservation not found"));
 
 		validateDecision(reservation, currentUserId);
 
 		reservation.setStatus(ThesisReservationStatus.APPROVED);
-		ThesisReservation saved = saveReservation(reservation);
+		saveReservation(reservation);
 
 		Thesis thesis = reservation.getThesis();
 		thesis.setStudent(reservation.getStudent());
 		thesis.setReservedAt(LocalDateTime.now());
+		thesis.setStatus(ThesisStatus.IN_PROGRESS);
 		thesisRepository.save(thesis);
 
 		denyOtherPendingReservations(thesis.getId(), reservation.getId());
 
-		return toDto(saved);
+		return new MessageResponse("Reservation approved");
 	}
 
-	public ThesisReservationDto denyReservation(Integer id, Integer currentUserId) {
+	public MessageResponse denyReservation(Integer id, Integer currentUserId) {
 		ThesisReservation reservation = reservationRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("Reservation not found"));
 
 		validateDecision(reservation, currentUserId);
 
 		reservation.setStatus(ThesisReservationStatus.DENIED);
-		return toDto(saveReservation(reservation));
+		saveReservation(reservation);
+		return new MessageResponse("Reservation denied");
 	}
 
-	public ThesisReservationDto cancelReservation(Integer id, Integer currentUserId) {
+	public MessageResponse cancelReservation(Integer id, Integer currentUserId) {
 		ThesisReservation reservation = reservationRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("Reservation not found"));
 
 		validateCancel(reservation, currentUserId);
 
 		reservation.setStatus(ThesisReservationStatus.CANCELED);
-		return toDto(saveReservation(reservation));
+		saveReservation(reservation);
+		return new MessageResponse("Reservation canceled");
 	}
 
 	private void denyOtherPendingReservations(Integer thesisId, Integer approvedReservationId) {

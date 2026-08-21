@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,5 +59,19 @@ public class ThesisSubmissionController {
 		Integer currentUserId = (Integer) session.getAttribute("userId");
 		submissionService.createSubmission(thesisId, description, file, currentUserId);
 		return ResponseEntity.ok().body(new MessageResponse("Submission created successfully"));
+	}
+
+	@PutMapping("/{id}/accept")
+	@RequiresPermission("SUBMISSION_REVIEW")
+	public ResponseEntity<?> acceptSubmission(@PathVariable("id") Integer id, HttpSession session) {
+		Integer currentUserId = (Integer) session.getAttribute("userId");
+		return ResponseEntity.ok().body(submissionService.acceptSubmission(id, currentUserId));
+	}
+
+	@PutMapping("/{id}/request-changes")
+	@RequiresPermission("SUBMISSION_REVIEW")
+	public ResponseEntity<?> requestChanges(@PathVariable("id") Integer id, HttpSession session) {
+		Integer currentUserId = (Integer) session.getAttribute("userId");
+		return ResponseEntity.ok().body(submissionService.requestChanges(id, currentUserId));
 	}
 }
