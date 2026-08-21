@@ -37,10 +37,11 @@ public class ThesisController {
 	@RequiresPermission("THESES_READ")
 	public ResponseEntity<?> getTheses(
 			@RequestParam(name = "mentorId", required = false) Integer mentorId,
+			@RequestParam(name = "studentId", required = false) Integer studentId,
 			@RequestParam(name = "title", required = false) String title,
 			@RequestParam(name = "mentorName", required = false) String mentorName,
 			@RequestParam(name = "reserved", required = false) Boolean reserved) {
-		return ResponseEntity.ok().body(thesisService.getAllTheses(mentorId, title, mentorName, reserved));
+		return ResponseEntity.ok().body(thesisService.getAllTheses(mentorId, studentId, title, mentorName, reserved));
 	}
 
 	@DeleteMapping("/{id}")

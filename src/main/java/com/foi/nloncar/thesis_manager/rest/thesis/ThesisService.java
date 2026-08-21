@@ -56,8 +56,9 @@ public class ThesisService {
 		return thesisRepository.save(thesis);
 	}
 
-	public List<ThesisDto> getAllTheses(Integer mentorId, String title, String mentorName, Boolean reserved) {
-		return thesisRepository.search(mentorId, title, mentorName, reserved).stream()
+	public List<ThesisDto> getAllTheses(Integer mentorId, Integer studentId, String title, String mentorName,
+										 Boolean reserved) {
+		return thesisRepository.search(mentorId, studentId, title, mentorName, reserved).stream()
 				.map(thesis -> toDto(thesis, null))
 				.toList();
 	}

@@ -3,10 +3,31 @@
       layout:decorate="~{layout}">
 <head>
 	<title>Home</title>
+	<script th:inline="javascript">
+		const currentUserId = /*[[${currentUserId}]]*/ null;
+		const canViewTheses = /*[[${permissions.contains('THESES_READ')}]]*/ false;
+	</script>
+	<script src="/js/home.js"></script>
 </head>
 <body>
 <main layout:fragment="content">
-	<h1>Home</h1>
+	<h1>Welcome<span th:if="${currentUserFullName != null}" th:text="', ' + ${currentUserFullName}"></span></h1>
+	<p class="text-muted">
+		Thesis Manager helps mentors propose theses, students reserve and submit work on them, and mentors review
+		and accept the final version. Use the menu on the left to get around.
+	</p>
+
+	<div id="my-thesis-section" class="d-none mt-4">
+		<h2 class="h5">Your Thesis</h2>
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title" id="my-thesis-title"></h5>
+				<p class="card-text mb-1">Status: <span id="my-thesis-status"></span></p>
+				<p class="card-text mb-1">Mentor: <span id="my-thesis-mentor"></span></p>
+				<a id="my-thesis-link" href="#" class="btn btn-primary btn-sm mt-2">View Details</a>
+			</div>
+		</div>
+	</div>
 </main>
 </body>
 </html>
