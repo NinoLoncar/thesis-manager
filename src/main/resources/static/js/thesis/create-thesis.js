@@ -2,10 +2,24 @@ $(function () {
 	$('#create-thesis-btn').on('click', function (event) {
 		event.preventDefault();
 
+		const title = $('#title').val();
+		const abstractText = $('#abstractText').val();
+		const type = $('#type').val();
+
+		const errors = [];
+		validateRequired(title, 'Title', errors);
+		validateMaxLength(title, 255, 'Title', errors);
+		validateRequired(type, 'Type', errors);
+
+		if (errors.length > 0) {
+			showValidationErrors(errors);
+			return;
+		}
+
 		const payload = {
-			title: $('#title').val(),
-			abstractText: $('#abstractText').val(),
-			type: $('#type').val()
+			title: title,
+			abstractText: abstractText,
+			type: type
 		};
 
 		$.ajax({

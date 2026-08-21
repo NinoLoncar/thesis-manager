@@ -33,13 +33,16 @@ public class ThesisService {
 	}
 
 	public ThesisDto createThesis(CreateThesisRequest request, Integer mentorId) {
+		validateTitle(request.title());
+		ThesisType type = parseType(request.type());
+
 		User mentor = userRepository.findById(mentorId).orElseThrow(
 				() -> new NotFoundException("Mentor not found"));
 
 		Thesis thesis = new Thesis(
 				request.title(),
 				request.abstractText(),
-				ThesisType.valueOf(request.type()),
+				type,
 				ThesisStatus.PROPOSED,
 				null,
 				mentor
@@ -77,6 +80,8 @@ public class ThesisService {
 	}
 
 	public ThesisDto updateThesis(Integer id, UpdateThesisRequest request) {
+		validateTitle(request.title());
+
 		Thesis thesis = thesisRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("Thesis not found"));
 
@@ -85,6 +90,25 @@ public class ThesisService {
 
 		Thesis saved = saveThesis(thesis);
 		return toDto(saved, null);
+	}
+
+	private static final int TITLE_MAX_LENGTH = 255;
+
+	private void validateTitle(String title) {
+		if (title == null || title.isBlank()) {
+			throw new ValidationException("Title is required");
+		}
+		if (title.length() > TITLE_MAX_LENGTH) {
+			throw new ValidationException("Title must be at most " + TITLE_MAX_LENGTH + " characters");
+		}
+	}
+
+	private ThesisType parseType(String type) {
+		try {
+			return ThesisType.valueOf(type);
+		} catch (IllegalArgumentException | NullPointerException e) {
+			throw new ValidationException("Invalid thesis type");
+		}
 	}
 
 	private ThesisDto toDto(Thesis thesis, Integer currentUserId) {

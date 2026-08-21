@@ -4,9 +4,21 @@ $(function () {
 	$('#save-thesis-btn').on('click', function (event) {
 		event.preventDefault();
 
+		const title = $('#title').val();
+		const abstractText = $('#abstractText').val();
+
+		const errors = [];
+		validateRequired(title, 'Title', errors);
+		validateMaxLength(title, 255, 'Title', errors);
+
+		if (errors.length > 0) {
+			showValidationErrors(errors);
+			return;
+		}
+
 		const payload = {
-			title: $('#title').val(),
-			abstractText: $('#abstractText').val()
+			title: title,
+			abstractText: abstractText
 		};
 
 		$.ajax({
