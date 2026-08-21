@@ -8,6 +8,7 @@ import com.foi.nloncar.thesis_manager.annotation.RequiresPermission;
 import com.foi.nloncar.thesis_manager.aspect.security.PermissionCheckAspect;
 import com.foi.nloncar.thesis_manager.dto.resource.MessageResponse;
 import com.foi.nloncar.thesis_manager.rest.security.AuthenticationController;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 
 public aspect ExceptionHandlingAspect {
@@ -47,6 +48,14 @@ public aspect ExceptionHandlingAspect {
 			return proceed();
 		} catch (ValidationException e) {
 			return ResponseEntity.status(400).body(new MessageResponse(e.getMessage()));
+		}
+	}
+
+	Object around(): protectedMethods() {
+		try {
+			return proceed();
+		} catch (DataIntegrityViolationException e) {
+			return ResponseEntity.status(409).body(new MessageResponse("This action conflicts with existing data"));
 		}
 	}
 }

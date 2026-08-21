@@ -9,6 +9,10 @@ import com.foi.nloncar.thesis_manager.exception.ValidationException;
 import com.foi.nloncar.thesis_manager.model.Role;
 import com.foi.nloncar.thesis_manager.model.User;
 import com.foi.nloncar.thesis_manager.repository.RoleRepository;
+import com.foi.nloncar.thesis_manager.repository.ThesisReservationRepository;
+import com.foi.nloncar.thesis_manager.repository.ThesisRepository;
+import com.foi.nloncar.thesis_manager.repository.ThesisSubmissionCommentRepository;
+import com.foi.nloncar.thesis_manager.repository.ThesisSubmissionRepository;
 import com.foi.nloncar.thesis_manager.repository.UserRepository;
 import com.foi.nloncar.thesis_manager.rest.security.PasswordHasher;
 import org.springframework.stereotype.Service;
@@ -24,11 +28,22 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 	private final PasswordHasher passwordHasher;
+	private final ThesisRepository thesisRepository;
+	private final ThesisReservationRepository reservationRepository;
+	private final ThesisSubmissionRepository submissionRepository;
+	private final ThesisSubmissionCommentRepository commentRepository;
 
-	public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordHasher passwordHasher) {
+	public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordHasher passwordHasher,
+						ThesisRepository thesisRepository, ThesisReservationRepository reservationRepository,
+						ThesisSubmissionRepository submissionRepository,
+						ThesisSubmissionCommentRepository commentRepository) {
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
 		this.passwordHasher = passwordHasher;
+		this.thesisRepository = thesisRepository;
+		this.reservationRepository = reservationRepository;
+		this.submissionRepository = submissionRepository;
+		this.commentRepository = commentRepository;
 	}
 
 	public List<UserDto> getAllUsers() {
@@ -57,6 +72,23 @@ public class UserService {
 	public void deleteUser(Integer id) {
 		userRepository.findById(id).orElseThrow(
 				() -> new NotFoundException("User not found"));
+
+		if (thesisRepository.existsByMentorId(id)) {
+			throw new ValidationException("Cannot delete a user that is mentoring a thesis");
+		}
+		if (thesisRepository.existsByStudentId(id)) {
+			throw new ValidationException("Cannot delete a user that is assigned to a thesis");
+		}
+		if (reservationRepository.existsByStudentId(id)) {
+			throw new ValidationException("Cannot delete a user that has thesis reservations");
+		}
+		if (submissionRepository.existsByStudentId(id) || submissionRepository.existsByReviewedById(id)) {
+			throw new ValidationException("Cannot delete a user that has thesis submissions");
+		}
+		if (commentRepository.existsByAuthorId(id)) {
+			throw new ValidationException("Cannot delete a user that has authored comments");
+		}
+
 		userRepository.deleteById(id);
 	}
 

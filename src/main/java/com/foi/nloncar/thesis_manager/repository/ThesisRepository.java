@@ -20,4 +20,8 @@ public interface ThesisRepository extends JpaRepository<Thesis, Integer> {
 						 @Param("title") String title,
 						 @Param("mentorName") String mentorName,
 						 @Param("reserved") Boolean reserved);
+
+	boolean existsByMentorId(Integer mentorId);
+
+	boolean existsByStudentId(Integer studentId);
 }

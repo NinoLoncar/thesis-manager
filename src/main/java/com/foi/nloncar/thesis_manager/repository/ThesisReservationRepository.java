@@ -9,4 +9,8 @@ public interface ThesisReservationRepository extends JpaRepository<ThesisReserva
 	List<ThesisReservation> findByThesisId(Integer thesisId);
 
 	List<ThesisReservation> findByStudentId(Integer studentId);
+
+	boolean existsByThesisId(Integer thesisId);
+
+	boolean existsByStudentId(Integer studentId);
 }

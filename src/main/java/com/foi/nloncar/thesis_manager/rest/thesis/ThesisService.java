@@ -70,6 +70,10 @@ public class ThesisService {
 			throw new ValidationException("Cannot delete a thesis that has a student assigned to it");
 		}
 
+		if (reservationRepository.existsByThesisId(id)) {
+			throw new ValidationException("Cannot delete a thesis that has reservations");
+		}
+
 		thesisRepository.deleteById(id);
 	}
 

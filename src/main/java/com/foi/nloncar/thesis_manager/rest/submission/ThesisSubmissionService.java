@@ -13,6 +13,7 @@ import com.foi.nloncar.thesis_manager.model.User;
 import com.foi.nloncar.thesis_manager.repository.ThesisRepository;
 import com.foi.nloncar.thesis_manager.repository.ThesisSubmissionRepository;
 import com.foi.nloncar.thesis_manager.repository.UserRepository;
+import com.foi.nloncar.thesis_manager.rest.thesis.ThesisService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -31,15 +32,18 @@ public class ThesisSubmissionService {
 	private final ThesisRepository thesisRepository;
 	private final UserRepository userRepository;
 	private final FileStorageService fileStorageService;
+	private final ThesisService thesisService;
 
 	public ThesisSubmissionService(ThesisSubmissionRepository submissionRepository,
 								   ThesisRepository thesisRepository,
 								   UserRepository userRepository,
-								   FileStorageService fileStorageService) {
+								   FileStorageService fileStorageService,
+								   ThesisService thesisService) {
 		this.submissionRepository = submissionRepository;
 		this.thesisRepository = thesisRepository;
 		this.userRepository = userRepository;
 		this.fileStorageService = fileStorageService;
+		this.thesisService = thesisService;
 	}
 
 	public List<ThesisSubmissionDto> getSubmissionsForThesis(Integer thesisId) {
@@ -125,7 +129,7 @@ public class ThesisSubmissionService {
 		Thesis thesis = submission.getThesis();
 		thesis.setStatus(ThesisStatus.SUBMITTED);
 		thesis.setSubmittedAt(LocalDateTime.now());
-		thesisRepository.save(thesis);
+		thesisService.saveThesis(thesis);
 
 		return new MessageResponse("Submission accepted as the final version");
 	}

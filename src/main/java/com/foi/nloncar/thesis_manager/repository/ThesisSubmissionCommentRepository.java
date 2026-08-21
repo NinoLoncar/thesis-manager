@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ThesisSubmissionCommentRepository extends JpaRepository<ThesisSubmissionComment, Integer> {
 	List<ThesisSubmissionComment> findBySubmissionIdOrderByCreatedAtAsc(Integer submissionId);
+
+	boolean existsByAuthorId(Integer authorId);
 }

@@ -23,7 +23,8 @@ public aspect RedirectAspect {
 	}
 
 	Object around(RequiresPagePermission requiresPagePermission):
-			execution(* *(..)) && @annotation(requiresPagePermission) {
+			execution(* com.foi.nloncar.thesis_manager.gui..*.*(..))
+					&& @annotation(requiresPagePermission) {
 
 		Integer userId = getCurrentUserId();
 		if (userId == null) {

@@ -14,6 +14,7 @@ import com.foi.nloncar.thesis_manager.model.User;
 import com.foi.nloncar.thesis_manager.repository.ThesisReservationRepository;
 import com.foi.nloncar.thesis_manager.repository.ThesisRepository;
 import com.foi.nloncar.thesis_manager.repository.UserRepository;
+import com.foi.nloncar.thesis_manager.rest.thesis.ThesisService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,13 +26,16 @@ public class ThesisReservationService {
 	private final ThesisReservationRepository reservationRepository;
 	private final ThesisRepository thesisRepository;
 	private final UserRepository userRepository;
+	private final ThesisService thesisService;
 
 	public ThesisReservationService(ThesisReservationRepository reservationRepository,
 									 ThesisRepository thesisRepository,
-									 UserRepository userRepository) {
+									 UserRepository userRepository,
+									 ThesisService thesisService) {
 		this.reservationRepository = reservationRepository;
 		this.thesisRepository = thesisRepository;
 		this.userRepository = userRepository;
+		this.thesisService = thesisService;
 	}
 
 	public ThesisReservationDto createReservation(CreateReservationRequest request, Integer studentId) {
@@ -69,7 +73,7 @@ public class ThesisReservationService {
 		thesis.setStudent(reservation.getStudent());
 		thesis.setReservedAt(LocalDateTime.now());
 		thesis.setStatus(ThesisStatus.IN_PROGRESS);
-		thesisRepository.save(thesis);
+		thesisService.saveThesis(thesis);
 
 		denyOtherPendingReservations(thesis.getId(), reservation.getId());
 

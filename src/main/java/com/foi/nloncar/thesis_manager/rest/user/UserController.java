@@ -45,6 +45,7 @@ public class UserController {
 	@PutMapping("/{id}")
 	@RequiresPermission("USER_EDIT")
 	public ResponseEntity<?> updateUser(@PathVariable("id") Integer userId, @RequestBody UpdateUserRequest request) {
+		userService.updateUser(userId, request);
 		return ResponseEntity.ok().body(new MessageResponse("User updated"));
 	}
 

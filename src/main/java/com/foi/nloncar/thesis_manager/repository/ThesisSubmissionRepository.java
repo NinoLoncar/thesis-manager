@@ -10,4 +10,8 @@ public interface ThesisSubmissionRepository extends JpaRepository<ThesisSubmissi
 	List<ThesisSubmission> findByThesisIdOrderByVersionDesc(Integer thesisId);
 
 	boolean existsByThesisIdAndStatus(Integer thesisId, ThesisSubmissionStatus status);
+
+	boolean existsByStudentId(Integer studentId);
+
+	boolean existsByReviewedById(Integer reviewedById);
 }
