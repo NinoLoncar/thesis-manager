@@ -5,6 +5,8 @@
 	<title>Submission Details</title>
 	<script th:inline="javascript">
 		const submissionId = /*[[${submissionId}]]*/ null;
+		const currentUserId = /*[[${currentUserId}]]*/ null;
+		const canCreateComment = /*[[${permissions.contains('COMMENT_CREATE')}]]*/ false;
 	</script>
 	<script src="/js/submission/submission-details.js"></script>
 </head>
@@ -41,6 +43,18 @@
 	</table>
 
 	<a id="download-link" class="btn btn-primary" href="#" download>Download</a>
+
+	<div class="mt-4">
+		<h2 class="h5">Comments</h2>
+		<ul id="comments-list" class="list-group mb-3"></ul>
+
+		<div id="comment-form" class="d-none">
+			<div class="mb-2">
+				<textarea id="comment-content" class="form-control" rows="3" placeholder="Write a comment"></textarea>
+			</div>
+			<button id="comment-submit-btn" class="btn btn-primary btn-sm">Add Comment</button>
+		</div>
+	</div>
 </main>
 </body>
 </html>

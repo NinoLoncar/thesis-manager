@@ -62,8 +62,10 @@ public class ThesesController {
 	@RequiresPagePermission("SUBMISSIONS_READ")
 	public String submissionDetailsPage(@PathVariable("id") Integer id,
 										 @PathVariable("submissionId") Integer submissionId,
+										 HttpSession session,
 										 Model model) {
 		model.addAttribute("submissionId", submissionId);
+		model.addAttribute("currentUserId", session.getAttribute("userId"));
 		return "submission/submission-details";
 	}
 }
