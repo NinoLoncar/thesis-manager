@@ -5,6 +5,11 @@ spring:
     url:
     username:
     password:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
 app:
   storage:
     root:
