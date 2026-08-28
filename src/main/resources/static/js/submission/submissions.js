@@ -30,7 +30,7 @@ function renderSubmissions(submissions) {
 
 		const header = $('<div>').addClass('d-flex justify-content-between align-items-center');
 		header.append($('<strong>').text('Version ' + submission.version + ' - ' + submission.fileName));
-		header.append($('<span>').addClass('badge bg-secondary').text(submission.status));
+		header.append($('<span>').addClass('badge ' + statusBadgeClass(submission.status)).text(submission.status));
 		item.append(header);
 
 		if (submission.description) {
@@ -47,11 +47,24 @@ function renderSubmissions(submissions) {
 			item.append($('<div>').append(reviewInfo));
 		}
 
-		const detailsBtn = $('<button>').text('Details').addClass('btn btn-sm btn-secondary mt-2').on('click', function () {
+		const detailsBtn = $('<button>').text('Details').addClass('btn btn-sm btn-outline-primary mt-2').on('click', function () {
 			window.location.href = '/theses/' + thesisId + '/submissions/' + submission.id;
 		});
 		item.append(detailsBtn);
 
 		list.append(item);
 	});
+}
+
+function statusBadgeClass(status) {
+	switch (status) {
+		case 'ACCEPTED':
+			return 'bg-success';
+		case 'CHANGES_REQUESTED':
+			return 'bg-danger';
+		case 'UNDER_REVIEW':
+			return 'bg-warning text-dark';
+		default:
+			return 'bg-secondary';
+	}
 }
