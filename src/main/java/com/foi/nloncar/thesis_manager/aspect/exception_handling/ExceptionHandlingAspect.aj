@@ -23,39 +23,29 @@ public aspect ExceptionHandlingAspect {
 		try {
 			return proceed();
 		} catch (AuthenticationException e) {
-			return ResponseEntity.status(401).body(new MessageResponse(e.getMessage()));
-		}
-	}
-
-	Object around(): protectedMethods() {
-		try {
-			return proceed();
+			return ResponseEntity.status(401).body(
+					new MessageResponse(e.getMessage())
+			);
 		} catch (AuthorizationException e) {
-			return ResponseEntity.status(403).body(new MessageResponse(e.getMessage()));
-		}
-	}
-
-	Object around(): protectedMethods() {
-		try {
-			return proceed();
+			return ResponseEntity.status(403).body(
+					new MessageResponse(e.getMessage())
+			);
 		} catch (NotFoundException e) {
-			return ResponseEntity.status(404).body(new MessageResponse(e.getMessage()));
-		}
-	}
-
-	Object around(): protectedMethods() {
-		try {
-			return proceed();
+			return ResponseEntity.status(404).body(
+					new MessageResponse(e.getMessage())
+			);
 		} catch (ValidationException e) {
-			return ResponseEntity.status(400).body(new MessageResponse(e.getMessage()));
-		}
-	}
-
-	Object around(): protectedMethods() {
-		try {
-			return proceed();
+			return ResponseEntity.status(400).body(
+					new MessageResponse(e.getMessage())
+			);
 		} catch (DataIntegrityViolationException e) {
-			return ResponseEntity.status(409).body(new MessageResponse("This action conflicts with existing data"));
+			return ResponseEntity.status(409).body(
+					new MessageResponse("This action conflicts with existing data")
+			);
+		} catch (Exception e) {
+			return ResponseEntity.status(500).body(
+					new MessageResponse("Something went wrong")
+			);
 		}
 	}
 }
